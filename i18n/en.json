@@ -1,0 +1,49 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "home": {
+    "title": "Full Stack Developer",
+    "subtitle": "Building modern web applications with cutting-edge technologies",
+    "cta": "View My Work",
+    "featured_projects": "Featured Projects"
+  },
+  "about": {
+    "title": "About Me",
+    "description": "I'm a passionate full-stack developer with expertise in modern web technologies.",
+    "skills": "Skills",
+    "experience": "Experience"
+  },
+  "projects": {
+    "title": "My Projects",
+    "subtitle": "A collection of my recent work and personal projects",
+    "view_project": "View Project",
+    "view_code": "View Code",
+    "technologies_used": "Technologies Used",
+    "no_projects": "No projects found"
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Let's discuss your next project",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message. Please try again."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "projects": "Projets",
+    "contact": "Contact"
+  },
+  "home": {
+    "title": "Développeur Full Stack",
+    "subtitle": "Création d'applications web modernes avec des technologies de pointe",
+    "cta": "Voir Mon Travail",
+    "featured_projects": "Projets Vedettes"
+  },
+  "about": {
+    "title": "À Propos de Moi",
+    "description": "Je suis un développeur full-stack passionné avec une expertise en technologies web modernes.",
+    "skills": "Compétences",
+    "experience": "Expérience"
+  },
+  "projects": {
+    "title": "Mes Projets",
+    "subtitle": "Une collection de mes travaux récents et projets personnels",
+    "view_project": "Voir le Projet",
+    "view_code": "Voir le Code",
+    "technologies_used": "Technologies Utilisées",
+    "no_projects": "Aucun projet trouvé"
+  },
+  "contact": {
+    "title": "Contactez-Moi",
+    "subtitle": "Discutons de votre prochain projet",
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "subject": "Sujet",
+      "message": "Message",
+      "send": "Envoyer le Message",
+      "sending": "Envoi...",
+      "success": "Message envoyé avec succès!",
+      "error": "Échec de l'envoi du message. Veuillez réessayer."
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Quelque chose s'est mal passé",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent"
+  }
+}
