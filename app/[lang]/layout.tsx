@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { LocaleParams } from '@/types';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
+import resumeData from '@/data/resume.json';
 import '@/app/globals.css';
 
 // Dynamic imports for client components
@@ -45,9 +46,9 @@ export default async function LocaleLayout({
               <div className="flex h-16 items-center justify-between">
                 {/* Logo */}
                 <div className="flex items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-xl shadow-lg" style={{ background: 'var(--gradient-primary)' }}>
-                    <span className="text-white font-bold text-lg">P</span>
-                  </div>
+                  <Link href={`/${lang}`} className="flex items-center justify-center w-10 h-10 rounded-xl shadow-lg transition-transform duration-300 hover:scale-110" style={{ background: 'var(--gradient-primary)' }}>
+                    <span className="text-white font-bold text-lg">A</span>
+                  </Link>
                 </div>
 
                 {/* Unified Tab Group Navigation */}
@@ -90,32 +91,30 @@ export default async function LocaleLayout({
                 <div className="md:col-span-1">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="flex items-center justify-center w-10 h-10 rounded-xl shadow-lg" style={{ background: 'var(--gradient-primary)' }}>
-                      <span className="text-white font-bold text-lg">P</span>
+                      <span className="text-white font-bold text-lg">A</span>
                     </div>
-                    <span className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Portfolio</span>
+                    <span className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>{resumeData.personal.name.split(' ')[0]}</span>
                   </div>
                   <p className="text-sm mb-4" style={{ color: 'var(--color-muted)' }}>
-                    {t('footer.tagline')}
+                    {resumeData.personal.title}
                   </p>
                   <div className="flex gap-3">
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                    <a href={resumeData.personal.github} target="_blank" rel="noopener noreferrer"
                        className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                       style={{ background: 'var(--gradient-secondary)' }}>
+                       style={{ background: 'var(--gradient-secondary)' }}
+                       aria-label="GitHub">
                       <Github className="w-5 h-5" style={{ color: 'var(--color-text)' }} />
                     </a>
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                    <a href={resumeData.personal.linkedin} target="_blank" rel="noopener noreferrer"
                        className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                       style={{ background: 'var(--gradient-secondary)' }}>
+                       style={{ background: 'var(--gradient-secondary)' }}
+                       aria-label="LinkedIn">
                       <Linkedin className="w-5 h-5" style={{ color: 'var(--color-text)' }} />
                     </a>
-                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                    <a href={`mailto:${resumeData.personal.email}`}
                        className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                       style={{ background: 'var(--gradient-secondary)' }}>
-                      <Twitter className="w-5 h-5" style={{ color: 'var(--color-text)' }} />
-                    </a>
-                    <a href="mailto:your.email@example.com"
-                       className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                       style={{ background: 'var(--gradient-secondary)' }}>
+                       style={{ background: 'var(--gradient-secondary)' }}
+                       aria-label="Email">
                       <Mail className="w-5 h-5" style={{ color: 'var(--color-text)' }} />
                     </a>
                   </div>
@@ -187,8 +186,8 @@ export default async function LocaleLayout({
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2">
                       <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-primary)' }} />
-                      <a href="mailto:your.email@example.com" className="text-sm transition-colors duration-300" style={{ color: 'var(--color-muted)' }}>
-                        {t('contact.info.email.value')}
+                      <a href={`mailto:${resumeData.personal.email}`} className="text-sm transition-colors duration-300 hover:underline" style={{ color: 'var(--color-muted)' }}>
+                        {resumeData.personal.email}
                       </a>
                     </li>
                     <li>

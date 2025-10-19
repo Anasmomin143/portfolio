@@ -2,6 +2,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { LocaleParams } from '@/types';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import resumeData from '@/data/resume.json';
 
 // Dynamic imports for animation components
 const FadeIn = dynamic(() => import('@/components/animations/fade-in').then(mod => ({ default: mod.FadeIn })));
@@ -49,24 +50,25 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
             <ScaleIn delay={0.4}>
               <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium shadow-soft" style={{ background: 'var(--gradient-secondary)', color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}>
                 <Rocket className="w-4 h-4" />
-                {t('badge')}
+                {resumeData.personal.title}
               </span>
             </ScaleIn>
           </div>
         </FadeIn>
         <FadeIn delay={0.6} direction="up">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl relative" style={{ color: 'var(--color-text)' }}>
-            {t('title')}{' '}
+            Hi, I&apos;m{' '}
             <span className="animate-pulse" style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-              {t('titleHighlight')}
+              {resumeData.personal.name}
             </span>
             <div className="absolute -inset-1 rounded-lg blur-xl -z-10" style={{ background: 'var(--gradient-primary)', opacity: 0.3 }}></div>
           </h1>
         </FadeIn>
-        
+
         <FadeIn delay={0.8} direction="up">
           <p className="mt-6 text-lg leading-8 max-w-3xl mx-auto font-medium" style={{ color: 'var(--color-muted)' }}>
-            {t('subtitle')}
+            Software Engineer II with 4+ years of experience building high-performance web applications.
+            Specializing in React, Angular, Next.js, and TypeScript to deliver scalable solutions.
           </p>
         </FadeIn>
 
@@ -76,44 +78,62 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
             {t('languageLabel')} {lang.toUpperCase()}
           </p>
         </ScaleIn>
-        <StaggerContainer className="mt-12 flex items-center justify-center gap-x-6">
+        <StaggerContainer className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <StaggerItem>
-            <HoverCard scaleOnHover={1.08} rotateOnHover={-1}>
-              <Link 
+            <HoverCard scaleOnHover={1.05}>
+              <Link
                 href={`/${lang}/about`}
-                className="group inline-flex items-center rounded-xl px-8 py-4 text-base font-semibold text-white shadow-medium hover:shadow-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all duration-300"
-                style={{ background: 'var(--gradient-primary)', outlineColor: 'var(--color-primary)' }}
+                className="group relative inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-bold text-white shadow-lg hover:shadow-xl overflow-hidden transition-all duration-500"
+                style={{ background: 'var(--gradient-primary)' }}
               >
-                {t('cta.learnMore')}
-                <svg className="ml-2 -mr-1 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+                <span className="absolute inset-0 w-full h-full bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></span>
+                <span className="relative flex items-center gap-2">
+                  {t('cta.learnMore')}
+                  <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+                <span className="absolute inset-0 border-2 border-white opacity-0 rounded-full group-hover:opacity-30 transition-opacity duration-500"></span>
               </Link>
             </HoverCard>
           </StaggerItem>
           <StaggerItem>
-            <HoverCard scaleOnHover={1.08} rotateOnHover={1}>
-              <Link 
+            <HoverCard scaleOnHover={1.05}>
+              <Link
                 href={`/${lang}/projects`}
-                className="group inline-flex items-center rounded-xl px-8 py-4 text-base font-semibold shadow-soft hover:shadow-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all duration-300"
-                style={{ borderColor: 'var(--color-primary)', background: 'var(--gradient-secondary)', color: 'var(--color-primary)', outlineColor: 'var(--color-primary)' }}
+                className="group relative inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-bold shadow-lg hover:shadow-xl overflow-hidden transition-all duration-500 border-2"
+                style={{
+                  borderColor: 'var(--color-primary)',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  color: 'var(--color-text)'
+                }}
               >
-                {t('cta.viewProjects')}
-                <Briefcase className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'var(--gradient-primary)' }}></span>
+                <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-500">
+                  <Briefcase className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                  {t('cta.viewProjects')}
+                </span>
               </Link>
             </HoverCard>
           </StaggerItem>
           <StaggerItem>
-            <HoverCard scaleOnHover={1.08} rotateOnHover={-1}>
-              <a
-                href="/resume.pdf"
-                download="Resume.pdf"
-                className="group inline-flex items-center rounded-xl px-8 py-4 text-base font-semibold text-white shadow-medium hover:shadow-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all duration-300"
-                style={{ background: 'var(--gradient-primary)', outlineColor: 'var(--color-primary)' }}
+            <HoverCard scaleOnHover={1.05}>
+              <Link
+                href={`/${lang}/resume`}
+                className="group relative inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-bold shadow-lg hover:shadow-xl overflow-hidden transition-all duration-500 border-2"
+                style={{
+                  borderColor: 'var(--color-accent)',
+                  background: 'linear-gradient(135deg, var(--color-accent), var(--color-secondary))',
+                  color: 'white'
+                }}
               >
-                {t('cta.downloadResume')}
-                <Download className="ml-2 w-5 h-5 group-hover:translate-y-1 transition-transform duration-300" />
-              </a>
+                <span className="absolute inset-0 w-full h-full bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></span>
+                <span className="relative flex items-center gap-2">
+                  <Download className="w-5 h-5 group-hover:translate-y-1 transition-transform duration-300" />
+                  {t('cta.downloadResume')}
+                </span>
+              </Link>
             </HoverCard>
           </StaggerItem>
         </StaggerContainer>

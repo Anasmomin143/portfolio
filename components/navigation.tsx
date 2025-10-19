@@ -25,6 +25,7 @@ export function Navigation({ lang }: NavigationProps) {
     { href: `/${lang}/services`, label: t('services') },
     { href: `/${lang}/projects`, label: t('projects') },
     { href: `/${lang}/about`, label: t('about') },
+    { href: `/${lang}/resume`, label: t('resume') },
     { href: `/${lang}/contact`, label: t('contact') },
   ];
 

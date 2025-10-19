@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LocaleParams } from '@/types';
+import resumeData from '@/data/resume.json';
 
 // Dynamic imports for animations
 const FadeIn = dynamic(() => import('@/components/animations/fade-in').then(mod => ({ default: mod.FadeIn })));
@@ -26,23 +27,23 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
     {
       icon: Mail,
       title: 'Email',
-      value: 'your.email@example.com',
-      href: 'mailto:your.email@example.com',
+      value: resumeData.personal.email,
+      href: `mailto:${resumeData.personal.email}`,
       color: 'var(--color-primary)',
       gradient: 'var(--gradient-primary)',
     },
     {
       icon: Phone,
       title: 'Phone',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
+      value: resumeData.personal.phone,
+      href: `tel:${resumeData.personal.phone.replace(/\s+/g, '')}`,
       color: 'var(--color-accent)',
       gradient: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%)',
     },
     {
       icon: MapPin,
       title: 'Location',
-      value: 'San Francisco, CA',
+      value: resumeData.personal.location,
       href: '#',
       color: 'var(--color-secondary)',
       gradient: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%)',
@@ -53,20 +54,14 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
     {
       icon: Github,
       name: 'GitHub',
-      href: 'https://github.com/yourusername',
+      href: resumeData.personal.github,
       color: 'var(--color-text)',
     },
     {
       icon: Linkedin,
       name: 'LinkedIn',
-      href: 'https://linkedin.com/in/yourusername',
+      href: resumeData.personal.linkedin,
       color: '#0077B5',
-    },
-    {
-      icon: Twitter,
-      name: 'Twitter',
-      href: 'https://twitter.com/yourusername',
-      color: '#1DA1F2',
     },
   ];
 
