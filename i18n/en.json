@@ -5,6 +5,7 @@
     "services": "Services",
     "projects": "My Projects",
     "resume": "Resume",
+    "schedule": "Schedule",
     "contact": "Contact",
     "language": "Language"
   },
@@ -209,6 +210,50 @@
     "contact": "Contact",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
+  },
+  "schedule": {
+    "badge": "Schedule Meeting",
+    "title": "Book a",
+    "titleHighlight": "Meeting",
+    "description": "Schedule a time to discuss your project, collaboration opportunities, or just have a chat about technology.",
+    "legend": {
+      "available": "Available",
+      "selected": "Selected",
+      "booked": "Booked"
+    },
+    "booking": {
+      "title": "Book Meeting",
+      "date": "Date",
+      "time": "Time",
+      "name": {
+        "label": "Your Name",
+        "placeholder": "John Doe"
+      },
+      "email": {
+        "label": "Email Address",
+        "placeholder": "john@example.com"
+      },
+      "message": {
+        "label": "Message (Optional)",
+        "placeholder": "What would you like to discuss?"
+      },
+      "submit": "Confirm Booking",
+      "success": "Meeting scheduled successfully! You will receive a confirmation email shortly.",
+      "cancel": "Cancel"
+    },
+    "instructions": {
+      "title": "How to Schedule:",
+      "step1": "1. Select your preferred date and time from the calendar above",
+      "step2": "2. Choose an available time slot (shown in green)",
+      "step3": "3. Fill in your details and any specific topics you'd like to discuss",
+      "step4": "4. You'll receive a calendar invitation with meeting details"
+    },
+    "contact": {
+      "title": "Or reach out directly:",
+      "email": "Email:",
+      "linkedin": "LinkedIn:",
+      "linkedinText": "Connect on LinkedIn"
+    }
   },
   "common": {
     "loading": "Loading...",

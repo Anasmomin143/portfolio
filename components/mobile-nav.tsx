@@ -73,14 +73,6 @@ export function MobileNav({ lang }: MobileNavProps) {
               {t('about')}
             </Link>
             <Link
-              href={`/${lang}/resume`}
-              className="block px-4 py-2 font-medium rounded-lg transition-colors"
-              style={{ color: 'var(--color-muted)' }}
-              onClick={() => setIsOpen(false)}
-            >
-              {t('resume')}
-            </Link>
-            <Link
               href={`/${lang}/contact`}
               className="block px-4 py-2 font-medium rounded-lg transition-colors"
               style={{ color: 'var(--color-muted)' }}

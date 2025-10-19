@@ -5,6 +5,7 @@
     "services": "Services",
     "projects": "Mes Projets",
     "resume": "CV",
+    "schedule": "Planifier",
     "contact": "Contact",
     "language": "Langue"
   },
@@ -209,6 +210,50 @@
     "contact": "Contact",
     "privacy": "Politique de Confidentialité",
     "terms": "Conditions d'Utilisation"
+  },
+  "schedule": {
+    "badge": "Planifier une Réunion",
+    "title": "Réserver une",
+    "titleHighlight": "Réunion",
+    "description": "Planifiez un moment pour discuter de votre projet, d'opportunités de collaboration, ou simplement pour parler de technologie.",
+    "legend": {
+      "available": "Disponible",
+      "selected": "Sélectionné",
+      "booked": "Réservé"
+    },
+    "booking": {
+      "title": "Réserver une Réunion",
+      "date": "Date",
+      "time": "Heure",
+      "name": {
+        "label": "Votre Nom",
+        "placeholder": "Jean Dupont"
+      },
+      "email": {
+        "label": "Adresse Email",
+        "placeholder": "jean@exemple.com"
+      },
+      "message": {
+        "label": "Message (Optionnel)",
+        "placeholder": "De quoi aimeriez-vous discuter?"
+      },
+      "submit": "Confirmer la Réservation",
+      "success": "Réunion planifiée avec succès! Vous recevrez un email de confirmation sous peu.",
+      "cancel": "Annuler"
+    },
+    "instructions": {
+      "title": "Comment Planifier:",
+      "step1": "1. Sélectionnez votre date et heure préférées dans le calendrier ci-dessus",
+      "step2": "2. Choisissez un créneau horaire disponible (affiché en vert)",
+      "step3": "3. Remplissez vos informations et les sujets spécifiques que vous souhaitez aborder",
+      "step4": "4. Vous recevrez une invitation de calendrier avec les détails de la réunion"
+    },
+    "contact": {
+      "title": "Ou contactez-moi directement:",
+      "email": "Email:",
+      "linkedin": "LinkedIn:",
+      "linkedinText": "Connectez-vous sur LinkedIn"
+    }
   },
   "common": {
     "loading": "Chargement...",

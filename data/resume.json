@@ -90,6 +90,24 @@
     },
     {
       "id": "proj-2",
+      "name": "Curacao Travel Edge",
+      "company": "Webvillee Technology",
+      "startDate": "2024-05-01",
+      "endDate": "2024-10-31",
+      "current": false,
+      "description": "Experience and activities booking platform for Curacao Travel Edge with comprehensive booking and cancellation flows",
+      "highlights": [
+        "Developed frontend for experience booking platform with focus on intuitive booking and cancellation workflows",
+        "Constructed user-friendly interfaces for viewing, managing, and canceling booked activities",
+        "Improved user interaction by enabling easy booking adjustments and cancellations for travelers"
+      ],
+      "technologies": ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "REST APIs"],
+      "imageUrl": "/images/projects/curacao-travel.jpg",
+      "demoUrl": null,
+      "githubUrl": null
+    },
+    {
+      "id": "proj-3",
       "name": "Axis Bank Travel Edge",
       "company": "Webvillee Technology",
       "startDate": "2024-05-01",
@@ -105,7 +123,7 @@
       "githubUrl": null
     },
     {
-      "id": "proj-3",
+      "id": "proj-4",
       "name": "SBI Cards Travel Edge",
       "company": "Webvillee Technology",
       "startDate": "2023-11-01",
@@ -121,7 +139,7 @@
       "githubUrl": null
     },
     {
-      "id": "proj-4",
+      "id": "proj-5",
       "name": "Indigo Hotel Booking",
       "company": "Webvillee Technology",
       "startDate": "2023-06-01",

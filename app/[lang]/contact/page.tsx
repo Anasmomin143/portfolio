@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LocaleParams } from '@/types';
 import resumeData from '@/data/resume.json';
@@ -19,6 +20,7 @@ const Linkedin = dynamic(() => import('lucide-react').then(mod => ({ default: mo
 const Github = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Github })));
 const Twitter = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Twitter })));
 const MessageSquare = dynamic(() => import('lucide-react').then(mod => ({ default: mod.MessageSquare })));
+const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Calendar })));
 
 export default async function ContactPage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;
@@ -163,6 +165,46 @@ export default async function ContactPage({ params }: { params: Promise<LocalePa
                   );
                 })}
               </div>
+            </div>
+          </FadeIn>
+
+          {/* Book Meeting Card */}
+          <FadeIn delay={1.6}>
+            <div className="mt-8">
+              <HoverCard scaleOnHover={1.02}>
+                <div
+                  className="p-6 rounded-2xl shadow-soft border-2 transition-all duration-300"
+                  style={{
+                    background: 'var(--gradient-card)',
+                    borderColor: 'var(--color-primary)'
+                  }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div
+                      className="flex-shrink-0 h-12 w-12 rounded-xl flex items-center justify-center shadow-medium"
+                      style={{ background: 'var(--gradient-primary)' }}
+                    >
+                      <Calendar className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+                        Schedule a Meeting
+                      </h3>
+                      <p className="text-sm mb-4" style={{ color: 'var(--color-muted)' }}>
+                        Prefer a one-on-one conversation? Book a time slot that works for you.
+                      </p>
+                      <Link
+                        href={`/${lang}/schedule`}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-lg shadow-medium hover:shadow-strong transition-all duration-300 hover:scale-105"
+                        style={{ background: 'var(--gradient-primary)' }}
+                      >
+                        <Calendar className="w-4 h-4" />
+                        Book Now
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </HoverCard>
             </div>
           </FadeIn>
         </div>
