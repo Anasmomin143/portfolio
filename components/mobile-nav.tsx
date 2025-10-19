@@ -38,40 +38,40 @@ export function MobileNav({ lang }: MobileNavProps) {
               borderTop: '1px solid var(--color-primary)' 
             }}
           >
-            <Link 
-              href={`/${lang}`} 
+            <Link
+              href={`/${lang}`}
               className="block px-4 py-2 font-medium rounded-lg transition-colors"
               style={{ color: 'var(--color-text)' }}
               onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
-            <Link 
-              href="#services" 
+            <Link
+              href={`/${lang}/services`}
               className="block px-4 py-2 font-medium rounded-lg transition-colors"
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
               Services
             </Link>
-            <Link 
-              href={`/${lang}/projects`} 
+            <Link
+              href={`/${lang}/projects`}
               className="block px-4 py-2 font-medium rounded-lg transition-colors"
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
               My Projects
             </Link>
-            <Link 
-              href="#reviews" 
+            <Link
+              href={`/${lang}/about`}
               className="block px-4 py-2 font-medium rounded-lg transition-colors"
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
-              Reviews
+              About
             </Link>
-            <Link 
-              href={`/${lang}/about`} 
+            <Link
+              href={`/${lang}/contact`}
               className="block px-4 py-2 font-medium rounded-lg transition-colors"
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}

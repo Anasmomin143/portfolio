@@ -38,8 +38,7 @@ export function ScaleIn({
   return (
     <motion.div
       initial={{ scale: deviceCapabilities.isMobile ? 0.9 : 0.8, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      viewport={{ once: true, margin: '-10%' }}
+      animate={{ scale: 1, opacity: 1 }}
       transition={{
         duration: duration || animationConfig.duration,
         delay,

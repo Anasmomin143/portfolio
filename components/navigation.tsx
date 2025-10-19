@@ -20,10 +20,10 @@ export function Navigation({ lang }: NavigationProps) {
 
   const navItems = [
     { href: `/${lang}`, label: 'Home' },
-    { href: '#services', label: 'Services' },
+    { href: `/${lang}/services`, label: 'Services' },
     { href: `/${lang}/projects`, label: 'My Projects' },
-    { href: '#reviews', label: 'Reviews' },
-    { href: `/${lang}/about`, label: 'Contact' },
+    { href: `/${lang}/about`, label: 'About' },
+    { href: `/${lang}/contact`, label: 'Contact' },
   ];
 
   return (
