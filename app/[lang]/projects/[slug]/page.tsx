@@ -1,12 +1,16 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 // import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getProjectBySlug, getAllProjects } from '@/lib/data';
 import { ProjectParams } from '@/types';
 import { slugify, formatDate } from '@/lib/utils';
-import { Sparkles } from 'lucide-react';
+
+// Dynamic import for icon
+const Sparkles = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Sparkles })));
 
 export async function generateStaticParams() {
   const projects = await getAllProjects();
@@ -72,12 +76,15 @@ export default async function ProjectPage({ params }: { params: Promise<ProjectP
       </div>
 
       {/* Project Image */}
-      <div className="mb-8">
+      <div className="mb-8 relative aspect-video">
         {project.imageUrl ? (
-          <img
+          <Image
             src={project.imageUrl}
             alt={project.title}
-            className="w-full rounded-2xl shadow-strong"
+            fill
+            sizes="(max-width: 896px) 100vw, 896px"
+            className="rounded-2xl shadow-strong object-cover"
+            priority
           />
         ) : (
           <div className="aspect-video rounded-2xl flex items-center justify-center shadow-medium" style={{ background: 'var(--gradient-hero)' }}>
@@ -87,7 +94,7 @@ export default async function ProjectPage({ params }: { params: Promise<ProjectP
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
+              <h3 className="text-xl font-bold flex items-center gap-2 justify-center" style={{ color: 'var(--color-primary)' }}>
                 <Sparkles className="w-5 h-5" />
                 {project.title}
               </h3>

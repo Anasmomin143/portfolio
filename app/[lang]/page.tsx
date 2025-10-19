@@ -1,12 +1,24 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { LocaleParams } from '@/types';
-import { FadeIn } from '@/components/animations/fade-in';
-import { ScaleIn } from '@/components/animations/scale-in';
-import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
-import { FloatingElement } from '@/components/animations/floating-element';
-import { HoverCard } from '@/components/animations/hover-card';
-import { Rocket, Globe, Briefcase, Zap, Smartphone, Sparkles, Download } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+// Dynamic imports for animation components
+const FadeIn = dynamic(() => import('@/components/animations/fade-in').then(mod => ({ default: mod.FadeIn })));
+const ScaleIn = dynamic(() => import('@/components/animations/scale-in').then(mod => ({ default: mod.ScaleIn })));
+const StaggerContainer = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerContainer })));
+const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
+const FloatingElement = dynamic(() => import('@/components/animations/floating-element').then(mod => ({ default: mod.FloatingElement })));
+const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
+
+// Dynamic imports for icons
+const Rocket = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Rocket })));
+const Globe = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Globe })));
+const Briefcase = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Briefcase })));
+const Zap = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Zap })));
+const Smartphone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Smartphone })));
+const Sparkles = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Sparkles })));
+const Download = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Download })));
 
 export default async function HomePage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;

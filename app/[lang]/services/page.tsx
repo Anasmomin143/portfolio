@@ -1,10 +1,24 @@
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LocaleParams } from '@/types';
-import { FadeIn } from '@/components/animations/fade-in';
-import { ScaleIn } from '@/components/animations/scale-in';
-import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
-import { HoverCard } from '@/components/animations/hover-card';
-import { Code, Palette, Smartphone, Database, Cloud, Zap, Globe, ShoppingCart, CheckCircle } from 'lucide-react';
+
+// Dynamic imports for animations
+const FadeIn = dynamic(() => import('@/components/animations/fade-in').then(mod => ({ default: mod.FadeIn })));
+const ScaleIn = dynamic(() => import('@/components/animations/scale-in').then(mod => ({ default: mod.ScaleIn })));
+const StaggerContainer = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerContainer })));
+const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
+const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
+
+// Dynamic imports for icons
+const Code = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Code })));
+const Palette = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Palette })));
+const Smartphone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Smartphone })));
+const Database = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Database })));
+const Cloud = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Cloud })));
+const Zap = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Zap })));
+const Globe = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Globe })));
+const ShoppingCart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ShoppingCart })));
+const CheckCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.CheckCircle })));
 
 export default async function ServicesPage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;

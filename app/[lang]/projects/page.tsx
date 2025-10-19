@@ -1,15 +1,22 @@
 // import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getAllProjects } from '@/lib/data';
 import { LocaleParams } from '@/types';
 import { slugify } from '@/lib/utils';
-import { FadeIn } from '@/components/animations/fade-in';
-import { ScaleIn } from '@/components/animations/scale-in';
-import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
-import { HoverCard } from '@/components/animations/hover-card';
-import { Briefcase } from 'lucide-react';
+
+// Dynamic imports for animations (used multiple times on page)
+const FadeIn = dynamic(() => import('@/components/animations/fade-in').then(mod => ({ default: mod.FadeIn })));
+const ScaleIn = dynamic(() => import('@/components/animations/scale-in').then(mod => ({ default: mod.ScaleIn })));
+const StaggerContainer = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerContainer })));
+const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
+const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
+
+// Dynamic import for icon
+const Briefcase = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Briefcase })));
 
 export default async function ProjectsPage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;
@@ -61,10 +68,13 @@ export default async function ProjectsPage({ params }: { params: Promise<LocaleP
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="aspect-video flex items-center justify-center relative overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
                   {project.imageUrl ? (
-                    <img
+                    <Image
                       src={project.imageUrl}
                       alt={project.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover"
+                      priority={index < 3}
                     />
                   ) : (
                     <div className="text-center z-10">

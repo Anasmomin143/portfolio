@@ -1,10 +1,18 @@
+import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LocaleParams } from '@/types';
-import { FadeIn } from '@/components/animations/fade-in';
-import { ScaleIn } from '@/components/animations/scale-in';
-import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
-import { HoverCard } from '@/components/animations/hover-card';
-import { User, Building, Rocket } from 'lucide-react';
+
+// Dynamic imports for animations
+const FadeIn = dynamic(() => import('@/components/animations/fade-in').then(mod => ({ default: mod.FadeIn })));
+const ScaleIn = dynamic(() => import('@/components/animations/scale-in').then(mod => ({ default: mod.ScaleIn })));
+const StaggerContainer = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerContainer })));
+const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
+const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
+
+// Dynamic imports for icons
+const User = dynamic(() => import('lucide-react').then(mod => ({ default: mod.User })));
+const Building = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Building })));
+const Rocket = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Rocket })));
 
 export default async function AboutPage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;

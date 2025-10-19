@@ -1,14 +1,19 @@
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { LocaleParams } from '@/types';
-import { ThemeSelector } from '@/components/theme-selector';
-import { GlassModeToggle } from '@/components/glass-mode-toggle';
-import { MobileNav } from '@/components/mobile-nav';
-import { Navigation } from '@/components/navigation';
-import { Sparkles, Globe, Heart, Menu } from 'lucide-react';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import '@/app/globals.css';
+
+// Dynamic imports for client components
+const ThemeSelector = dynamic(() => import('@/components/theme-selector').then(mod => ({ default: mod.ThemeSelector })));
+const MobileNav = dynamic(() => import('@/components/mobile-nav').then(mod => ({ default: mod.MobileNav })));
+const Navigation = dynamic(() => import('@/components/navigation').then(mod => ({ default: mod.Navigation })));
+
+// Dynamic imports for icons (used in server component)
+const Globe = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Globe })));
+const Heart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Heart })));
 
 const inter = Inter({ subsets: ['latin'] });
 
