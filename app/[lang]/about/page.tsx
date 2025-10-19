@@ -4,6 +4,7 @@ import { FadeIn } from '@/components/animations/fade-in';
 import { ScaleIn } from '@/components/animations/scale-in';
 import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
 import { HoverCard } from '@/components/animations/hover-card';
+import { User, Building, Rocket } from 'lucide-react';
 
 export default async function AboutPage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;
@@ -23,8 +24,9 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
         <FadeIn delay={0.2}>
           <div className="mb-8">
             <ScaleIn delay={0.4}>
-              <span className="inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold shadow-soft" style={{ background: 'var(--gradient-secondary)', color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}>
-                👨‍💻 About Me
+              <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-soft" style={{ background: 'var(--gradient-secondary)', color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}>
+                <User className="w-4 h-4" />
+                About Me
               </span>
             </ScaleIn>
           </div>
@@ -49,8 +51,8 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
 
       <StaggerContainer className="grid gap-12 lg:grid-cols-2" staggerDelay={0.2}>
         {/* Skills Section */}
-        <StaggerItem>
-          <HoverCard scaleOnHover={1.03} rotateOnHover={1}>
+        <StaggerItem index={0}>
+          <HoverCard element="card">
             <Card>
               <CardHeader>
                 <CardTitle>Skills</CardTitle>
@@ -59,22 +61,18 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
               <CardContent>
                 <StaggerContainer className="grid gap-4" staggerDelay={0.05}>
                   {skills.map((skill, index) => (
-                    <StaggerItem key={skill.name}>
-                      <HoverCard scaleOnHover={1.02} className="flex justify-between items-center">
+                    <StaggerItem key={skill.name} index={index}>
+                      <HoverCard element="text" className="flex justify-between items-center p-3 rounded-lg" style={{ background: 'var(--gradient-secondary)' }}>
                         <div>
-                          <span className="font-medium">{skill.name}</span>
+                          <span className="font-medium" style={{ color: 'var(--color-text)' }}>{skill.name}</span>
                           <span className="text-sm ml-2" style={{ color: 'var(--color-muted)' }}>({skill.category})</span>
                         </div>
                         <span className="inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium ring-1 ring-inset" style={{
-                          backgroundColor: skill.level === 'expert' ? 'rgba(34, 197, 94, 0.1)' : 
-                                         skill.level === 'advanced' ? 'var(--color-surface)' : 
-                                         'rgba(249, 115, 22, 0.1)',
-                          color: skill.level === 'expert' ? 'rgba(34, 197, 94, 1)' : 
-                                 skill.level === 'advanced' ? 'var(--color-primary)' : 
-                                 'rgba(249, 115, 22, 1)',
-                          borderColor: skill.level === 'expert' ? 'rgba(34, 197, 94, 0.2)' : 
-                                      skill.level === 'advanced' ? 'var(--color-primary)' : 
-                                      'rgba(249, 115, 22, 0.2)'
+                          backgroundColor: skill.level === 'expert' ? 'var(--color-accent)' : 
+                                         skill.level === 'advanced' ? 'var(--color-primary)' : 
+                                         'var(--color-secondary)',
+                          color: 'white',
+                          opacity: 0.9
                         }}>
                           {skill.level}
                         </span>
@@ -88,8 +86,8 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
         </StaggerItem>
 
         {/* Experience Section */}
-        <StaggerItem>
-          <HoverCard scaleOnHover={1.03} rotateOnHover={-1}>
+        <StaggerItem index={1}>
+          <HoverCard element="card">
             <Card>
           <CardHeader>
             <CardTitle>Experience</CardTitle>
@@ -97,14 +95,17 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
           </CardHeader>
           <CardContent>
             <StaggerContainer className="space-y-6" staggerDelay={0.1}>
-              <StaggerItem>
-                <HoverCard scaleOnHover={1.02} rotateOnHover={1}>
+              <StaggerItem index={0}>
+                <HoverCard element="text">
                   <div className="pl-6 p-6 rounded-r-2xl shadow-soft hover:shadow-medium transition-all duration-300" style={{ borderLeft: `4px solid var(--color-primary)`, background: 'var(--gradient-card)' }}>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="inline-block w-3 h-3 rounded-full animate-pulse" style={{ background: 'var(--gradient-primary)' }}></span>
                       <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>Senior Full Stack Developer</h3>
                     </div>
-                    <p className="text-sm font-semibold" style={{ color: 'var(--color-primary)' }}>🏢 TechCorp • 2022 - Present</p>
+                    <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
+                      <Building className="w-4 h-4" />
+                      TechCorp • 2022 - Present
+                    </p>
                     <p className="text-sm mt-3 leading-relaxed" style={{ color: 'var(--color-muted)' }}>
                       Leading development of modern web applications using React, Next.js, and Node.js.
                       Mentoring junior developers and implementing best practices.
@@ -113,14 +114,17 @@ export default async function AboutPage({ params }: { params: Promise<LocalePara
                 </HoverCard>
               </StaggerItem>
               
-              <StaggerItem>
-                <HoverCard scaleOnHover={1.02} rotateOnHover={-1}>
+              <StaggerItem index={1}>
+                <HoverCard element="text">
                   <div className="pl-6 p-6 rounded-r-2xl shadow-soft hover:shadow-medium transition-all duration-300" style={{ borderLeft: `4px solid var(--color-secondary)`, background: 'var(--gradient-card)' }}>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
                       <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>Full Stack Developer</h3>
                     </div>
-                    <p className="text-sm font-semibold" style={{ color: 'var(--color-secondary)' }}>🚀 StartupXYZ • 2020 - 2022</p>
+                    <p className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-secondary)' }}>
+                      <Rocket className="w-4 h-4" />
+                      StartupXYZ • 2020 - 2022
+                    </p>
                     <p className="text-sm mt-3 leading-relaxed" style={{ color: 'var(--color-muted)' }}>
                       Built and maintained multiple client projects, implemented CI/CD pipelines,
                       and contributed to the company's core product development.

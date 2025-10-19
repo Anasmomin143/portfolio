@@ -2,6 +2,10 @@ import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import { LocaleParams } from '@/types';
 import { ThemeSelector } from '@/components/theme-selector';
+import { GlassModeToggle } from '@/components/glass-mode-toggle';
+import { MobileNav } from '@/components/mobile-nav';
+import { Navigation } from '@/components/navigation';
+import { Sparkles, Globe, Heart, Menu } from 'lucide-react';
 import '@/app/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -18,32 +22,50 @@ export default async function LocaleLayout({
   return (
     <html lang={lang} className={inter.className}>
       <body className="min-h-screen antialiased" style={{ background: 'var(--color-background)' }}>
-          <header className="backdrop-blur-md border-b shadow-lg" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-primary)' }}>
-            <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="flex h-16 justify-between">
-                <div className="flex">
-                  <div className="flex flex-shrink-0 items-center">
-                    <h1 className="text-xl font-bold" style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-                      ✨ Portfolio
-                    </h1>
-                  </div>
-                  <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                    <Link href={`/${lang}`} className="border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 rounded-t-lg hover:border-primary-400" style={{ color: 'var(--color-text)' }}>
-                      Home
-                    </Link>
-                    <Link href={`/${lang}/about`} className="border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 rounded-t-lg hover:border-primary-400" style={{ color: 'var(--color-text)' }}>
-                      About
-                    </Link>
-                    <Link href={`/${lang}/projects`} className="border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 rounded-t-lg hover:border-primary-400" style={{ color: 'var(--color-text)' }}>
-                      Projects
-                    </Link>
+          <header className="sticky top-0 z-50 backdrop-blur-xl" style={{ 
+            background: 'var(--color-surface)', 
+            borderBottom: '1px solid var(--color-primary)'
+          }}>
+            {/* Theme-aware header background */}
+            <div className="absolute inset-0" style={{ 
+              background: 'var(--gradient-secondary)',
+              backdropFilter: 'blur(20px)'
+            }}></div>
+            
+            <nav className="relative mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="flex h-16 items-center justify-between">
+                {/* Logo */}
+                <div className="flex items-center">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl shadow-lg" style={{ background: 'var(--gradient-primary)' }}>
+                    <span className="text-white font-bold text-lg">P</span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <ThemeSelector />
-                  <Link href={lang === 'en' ? '/fr' : '/en'} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full shadow-soft hover:shadow-medium transition-all duration-300 transform hover:scale-105" style={{ color: 'var(--color-primary)', background: 'var(--gradient-secondary)', borderColor: 'var(--color-primary)' }}>
-                    🌐 {lang === 'en' ? 'FR' : 'EN'}
+
+                {/* Unified Tab Group Navigation */}
+                <Navigation lang={lang} />
+
+                {/* Right side - Contact Button with controls */}
+                <div className="flex items-center space-x-3">
+                  {/* Hidden controls on smaller screens, shown in mobile menu */}
+                  <div className="hidden lg:flex items-center space-x-2">
+                    {/* <GlassModeToggle /> */}
+                    <ThemeSelector />
+                    <Link href={lang === 'en' ? '/fr' : '/en'} className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-lg transition-all duration-300" style={{ color: 'var(--color-text)' }}>
+                      <Globe className="w-3 h-3" />
+                      {lang === 'en' ? 'FR' : 'EN'}
+                    </Link>
+                  </div>
+                  
+                  {/* Contact Button */}
+                  <Link 
+                    href={`/${lang}/about`}
+                    className="px-6 py-2 text-white font-medium rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-lg"
+                    style={{ background: 'var(--gradient-primary)' }}
+                  >
+                    Contact
                   </Link>
+
+                  <MobileNav lang={lang} />
                 </div>
               </div>
             </nav>
@@ -51,8 +73,8 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
           <footer className="border-t mt-auto" style={{ background: 'var(--gradient-secondary)', borderColor: 'var(--color-primary)' }}>
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-              <p className="text-center text-sm font-medium" style={{ color: 'var(--color-muted)' }}>
-                © 2024 Portfolio. Made with 💜 and cutting-edge tech.
+              <p className="text-center text-sm font-medium flex items-center justify-center gap-2" style={{ color: 'var(--color-muted)' }}>
+                © 2024 Portfolio. Made with <Heart className="w-4 h-4 text-red-500" /> and cutting-edge tech.
               </p>
             </div>
           </footer>

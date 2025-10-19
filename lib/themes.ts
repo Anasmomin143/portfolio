@@ -1,7 +1,9 @@
+import { LucideIcon, Heart, Waves, Sunrise, TreePine, Moon, Sparkles } from 'lucide-react';
+
 export interface Theme {
   id: string;
   name: string;
-  emoji: string;
+  icon: LucideIcon;
   description: string;
   colors: {
     primary: string;
@@ -24,7 +26,7 @@ export const themes: Theme[] = [
   {
     id: 'purple',
     name: 'Purple Dream',
-    emoji: '💜',
+    icon: Heart,
     description: 'Elegant purple with soft gradients',
     colors: {
       primary: 'rgb(168, 85, 247)', // purple-500
@@ -45,7 +47,7 @@ export const themes: Theme[] = [
   {
     id: 'ocean',
     name: 'Ocean Breeze',
-    emoji: '🌊',
+    icon: Waves,
     description: 'Cool blues and teals like the ocean',
     colors: {
       primary: 'rgb(6, 182, 212)', // cyan-500
@@ -66,7 +68,7 @@ export const themes: Theme[] = [
   {
     id: 'sunset',
     name: 'Sunset Glow',
-    emoji: '🌅',
+    icon: Sunrise,
     description: 'Warm oranges and pinks like sunset',
     colors: {
       primary: 'rgb(249, 115, 22)', // orange-500
@@ -87,7 +89,7 @@ export const themes: Theme[] = [
   {
     id: 'forest',
     name: 'Forest Green',
-    emoji: '🌲',
+    icon: TreePine,
     description: 'Natural greens and earth tones',
     colors: {
       primary: 'rgb(34, 197, 94)', // green-500
@@ -108,7 +110,7 @@ export const themes: Theme[] = [
   {
     id: 'dark',
     name: 'Dark Mode',
-    emoji: '🌙',
+    icon: Moon,
     description: 'Sleek dark theme with purple accents',
     colors: {
       primary: 'rgb(147, 51, 234)', // purple-600
@@ -150,10 +152,20 @@ export const applyTheme = (theme: Theme) => {
   root.style.setProperty('--gradient-hero', theme.gradients.hero);
   root.style.setProperty('--gradient-card', theme.gradients.card);
   
-  // Add/remove dark class for dark theme
+  // Handle theme classes (only dark mode, glass mode is handled separately)
+  root.classList.remove('dark');
+  
   if (theme.id === 'dark') {
     root.classList.add('dark');
+  }
+};
+
+export const applyGlassMode = (isGlassMode: boolean) => {
+  const root = document.documentElement;
+  
+  if (isGlassMode) {
+    root.classList.add('liquid-glass');
   } else {
-    root.classList.remove('dark');
+    root.classList.remove('liquid-glass');
   }
 };

@@ -5,6 +5,7 @@ import { ScaleIn } from '@/components/animations/scale-in';
 import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
 import { FloatingElement } from '@/components/animations/floating-element';
 import { HoverCard } from '@/components/animations/hover-card';
+import { Rocket, Globe, Briefcase, Zap, Smartphone, Sparkles } from 'lucide-react';
 
 export default async function HomePage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = await params;
@@ -31,8 +32,9 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
         <FadeIn delay={0.2}>
           <div className="mb-8">
             <ScaleIn delay={0.4}>
-              <span className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-soft" style={{ background: 'var(--gradient-secondary)', color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}>
-                🚀 Full Stack Developer
+              <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium shadow-soft" style={{ background: 'var(--gradient-secondary)', color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}>
+                <Rocket className="w-4 h-4" />
+                Full Stack Developer
               </span>
             </ScaleIn>
           </div>
@@ -55,8 +57,9 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
         </FadeIn>
         
         <ScaleIn delay={1.0}>
-          <p className="mt-4 text-sm font-semibold px-3 py-1 rounded-full inline-block" style={{ color: 'var(--color-primary)', background: 'var(--gradient-secondary)', borderColor: 'var(--color-primary)' }}>
-            🌐 Language: {lang.toUpperCase()}
+          <p className="mt-4 text-sm font-semibold px-3 py-1 rounded-full inline-flex items-center gap-2" style={{ color: 'var(--color-primary)', background: 'var(--gradient-secondary)', borderColor: 'var(--color-primary)' }}>
+            <Globe className="w-4 h-4" />
+            Language: {lang.toUpperCase()}
           </p>
         </ScaleIn>
         <StaggerContainer className="mt-12 flex items-center justify-center gap-x-6">
@@ -82,7 +85,7 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
                 style={{ borderColor: 'var(--color-primary)', background: 'var(--gradient-secondary)', color: 'var(--color-primary)', outlineColor: 'var(--color-primary)' }}
               >
                 View Projects
-                <span className="ml-2 group-hover:rotate-12 transition-transform duration-300">💼</span>
+                <Briefcase className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
               </Link>
             </HoverCard>
           </StaggerItem>
@@ -101,7 +104,10 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
                   </svg>
                 </div>
               </ScaleIn>
-              <h3 className="mt-6 text-xl font-bold" style={{ color: 'var(--color-text)' }}>⚡ Fast Performance</h3>
+              <h3 className="mt-6 text-xl font-bold flex items-center justify-center gap-2" style={{ color: 'var(--color-text)' }}>
+                <Zap className="w-5 h-5" />
+                Fast Performance
+              </h3>
               <p className="mt-3 font-medium" style={{ color: 'var(--color-muted)' }}>Optimized applications with lightning-fast load times and smooth interactions.</p>
             </div>
           </HoverCard>
@@ -117,7 +123,10 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
                   </svg>
                 </div>
               </ScaleIn>
-              <h3 className="mt-6 text-xl font-bold" style={{ color: 'var(--color-text)' }}>📱 Responsive Design</h3>
+              <h3 className="mt-6 text-xl font-bold flex items-center justify-center gap-2" style={{ color: 'var(--color-text)' }}>
+                <Smartphone className="w-5 h-5" />
+                Responsive Design
+              </h3>
               <p className="mt-3 font-medium" style={{ color: 'var(--color-muted)' }}>Beautiful interfaces that work perfectly on all devices and screen sizes.</p>
             </div>
           </HoverCard>
@@ -133,7 +142,10 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
                   </svg>
                 </div>
               </ScaleIn>
-              <h3 className="mt-6 text-xl font-bold" style={{ color: 'var(--color-text)' }}>✨ Quality Code</h3>
+              <h3 className="mt-6 text-xl font-bold flex items-center justify-center gap-2" style={{ color: 'var(--color-text)' }}>
+                <Sparkles className="w-5 h-5" />
+                Quality Code
+              </h3>
               <p className="mt-3 font-medium" style={{ color: 'var(--color-muted)' }}>Clean, maintainable, and well-documented code following best practices.</p>
             </div>
           </HoverCard>

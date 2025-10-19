@@ -8,18 +8,58 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', asChild = false, ...props }, ref) => {
+  ({ className, variant = 'default', size = 'default', asChild = false, style, ...props }, ref) => {
+    const getVariantStyle = (variant: string) => {
+      switch (variant) {
+        case 'default':
+          return {
+            background: 'var(--gradient-primary)',
+            color: 'white',
+            border: 'none'
+          };
+        case 'outline':
+          return {
+            background: 'var(--gradient-secondary)',
+            color: 'var(--color-primary)',
+            border: '1px solid var(--color-primary)'
+          };
+        case 'ghost':
+          return {
+            background: 'transparent',
+            color: 'var(--color-text)',
+            border: 'none'
+          };
+        case 'destructive':
+          return {
+            background: 'linear-gradient(to right, #dc2626, #b91c1c)',
+            color: 'white',
+            border: 'none'
+          };
+        default:
+          return {
+            background: 'var(--gradient-primary)',
+            color: 'white',
+            border: 'none'
+          };
+      }
+    };
+
     const variants = {
-      default: 'bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 focus-visible:ring-primary-500 shadow-medium hover:shadow-strong transform hover:scale-105',
-      outline: 'border border-primary-300 bg-gradient-to-r from-surface-50 to-surface-100 hover:from-primary-50 hover:to-primary-100 text-primary-700 hover:text-primary-800 shadow-soft hover:shadow-medium',
-      ghost: 'hover:bg-gradient-to-r hover:from-primary-50 hover:to-surface-100 text-secondary-600 hover:text-primary-700',
-      destructive: 'bg-gradient-to-r from-error-600 to-error-700 text-white hover:from-error-700 hover:to-error-800 focus-visible:ring-error-500 shadow-medium hover:shadow-strong'
+      default: 'shadow-medium hover:shadow-strong transform hover:scale-105 text-white',
+      outline: 'shadow-soft hover:shadow-medium text-current',
+      ghost: 'hover:bg-opacity-10 text-current',
+      destructive: 'shadow-medium hover:shadow-strong transform hover:scale-105 text-white'
     };
 
     const sizes = {
       default: 'px-4 py-2 text-sm',
       sm: 'px-3 py-1.5 text-xs',
       lg: 'px-6 py-3 text-base'
+    };
+
+    const buttonStyle = {
+      ...getVariantStyle(variant),
+      ...style
     };
 
     if (asChild) {
@@ -33,6 +73,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             sizes[size],
             className
           )}
+          style={buttonStyle}
           {...props}
         />
       );
@@ -48,6 +89,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           sizes[size],
           className
         )}
+        style={buttonStyle}
         ref={ref}
         {...props}
       />
