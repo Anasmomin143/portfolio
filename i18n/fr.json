@@ -2,20 +2,194 @@
   "navigation": {
     "home": "Accueil",
     "about": "À propos",
-    "projects": "Projets",
-    "contact": "Contact"
+    "services": "Services",
+    "projects": "Mes Projets",
+    "contact": "Contact",
+    "language": "Langue"
   },
   "home": {
-    "title": "Développeur Full Stack",
-    "subtitle": "Création d'applications web modernes avec des technologies de pointe",
-    "cta": "Voir Mon Travail",
-    "featured_projects": "Projets Vedettes"
+    "badge": "Développeur Full Stack",
+    "title": "Bienvenue sur Mon",
+    "titleHighlight": "Portfolio",
+    "subtitle": "Création d'applications web modernes avec des technologies de pointe. Création de solutions belles, fonctionnelles et évolutives qui font la différence.",
+    "languageLabel": "Langue:",
+    "cta": {
+      "learnMore": "En Savoir Plus Sur Moi",
+      "viewProjects": "Voir les Projets"
+    },
+    "features": {
+      "performance": {
+        "title": "Performance Rapide",
+        "description": "Applications optimisées avec des temps de chargement ultra-rapides et des interactions fluides."
+      },
+      "responsive": {
+        "title": "Design Réactif",
+        "description": "De belles interfaces qui fonctionnent parfaitement sur tous les appareils et tailles d'écran."
+      },
+      "quality": {
+        "title": "Code de Qualité",
+        "description": "Code propre, maintenable et bien documenté suivant les meilleures pratiques."
+      }
+    }
   },
   "about": {
-    "title": "À Propos de Moi",
-    "description": "Je suis un développeur full-stack passionné avec une expertise en technologies web modernes.",
-    "skills": "Compétences",
-    "experience": "Expérience"
+    "badge": "À Propos de Moi",
+    "title": "Développeur",
+    "titleHighlight": "Passionné",
+    "description": "Je suis un développeur full-stack passionné avec une expertise en technologies web modernes. J'aime créer des applications belles, fonctionnelles et évolutives qui résolvent des problèmes réels.",
+    "skills": {
+      "title": "Compétences",
+      "description": "Technologies et outils avec lesquels je travaille",
+      "levels": {
+        "expert": "expert",
+        "advanced": "avancé",
+        "intermediate": "intermédiaire"
+      },
+      "categories": {
+        "frontend": "frontend",
+        "backend": "backend",
+        "database": "base de données"
+      }
+    },
+    "experience": {
+      "title": "Expérience",
+      "description": "Mon parcours professionnel",
+      "jobs": {
+        "senior": {
+          "title": "Développeur Full Stack Senior",
+          "company": "TechCorp",
+          "period": "2022 - Présent",
+          "description": "Direction du développement d'applications web modernes utilisant React, Next.js et Node.js. Mentorat des développeurs juniors et mise en œuvre des meilleures pratiques."
+        },
+        "developer": {
+          "title": "Développeur Full Stack",
+          "company": "StartupXYZ",
+          "period": "2020 - 2022",
+          "description": "Création et maintenance de plusieurs projets clients, mise en place de pipelines CI/CD et contribution au développement du produit principal de l'entreprise."
+        }
+      }
+    }
+  },
+  "services": {
+    "badge": "Services",
+    "title": "Ce Que Je",
+    "titleHighlight": "Propose",
+    "description": "Services de développement complets adaptés pour donner vie à vos idées. Du concept au déploiement, je fournis des solutions de bout en bout pour vos besoins numériques.",
+    "cta": {
+      "title": "Prêt à Démarrer Votre Projet?",
+      "description": "Travaillons ensemble pour donner vie à votre vision",
+      "button": "Contactez-Moi"
+    },
+    "list": {
+      "webDevelopment": {
+        "title": "Développement Web",
+        "description": "Création de sites web et d'applications web modernes et réactifs utilisant des technologies de pointe comme React, Next.js et TypeScript.",
+        "features": {
+          "custom": "Applications Web Personnalisées",
+          "pwa": "Applications Web Progressives (PWA)",
+          "api": "Développement et Intégration d'API",
+          "optimization": "Optimisation des Performances"
+        }
+      },
+      "uiux": {
+        "title": "Design UI/UX",
+        "description": "Création d'interfaces belles et intuitives qui offrent des expériences utilisateur exceptionnelles et favorisent l'engagement.",
+        "features": {
+          "ui": "Design d'Interface Utilisateur",
+          "ux": "Recherche d'Expérience Utilisateur",
+          "prototyping": "Prototypage et Maquettage",
+          "designSystems": "Systèmes de Design"
+        }
+      },
+      "mobile": {
+        "title": "Développement Mobile",
+        "description": "Développement d'applications mobiles multiplateformes qui fonctionnent parfaitement sur iOS et Android.",
+        "features": {
+          "reactNative": "Développement React Native",
+          "responsive": "Design Mobile Réactif",
+          "performance": "Performance Native",
+          "deployment": "Déploiement sur App Store"
+        }
+      },
+      "backend": {
+        "title": "Développement Backend",
+        "description": "Construction de systèmes backend robustes et évolutifs avec des API sécurisées et une gestion efficace des bases de données.",
+        "features": {
+          "api": "Conception d'API RESTful",
+          "database": "Architecture de Base de Données",
+          "security": "Authentification et Sécurité",
+          "logic": "Logique Côté Serveur"
+        }
+      },
+      "cloud": {
+        "title": "Solutions Cloud",
+        "description": "Déploiement et gestion d'applications sur des plateformes cloud avec des pipelines CI/CD automatisés.",
+        "features": {
+          "platforms": "AWS / Azure / GCP",
+          "containers": "Docker et Kubernetes",
+          "cicd": "Pipelines CI/CD",
+          "iac": "Infrastructure as Code"
+        }
+      },
+      "ecommerce": {
+        "title": "Solutions E-Commerce",
+        "description": "Création de plateformes e-commerce puissantes avec traitement sécurisé des paiements et gestion des stocks.",
+        "features": {
+          "cart": "Systèmes de Panier d'Achat",
+          "payment": "Intégration de Passerelle de Paiement",
+          "products": "Gestion des Produits",
+          "orders": "Traitement des Commandes"
+        }
+      }
+    }
+  },
+  "contact": {
+    "badge": "Contact",
+    "title": "Entrer En",
+    "titleHighlight": "Contact",
+    "description": "Vous avez un projet en tête ou vous voulez simplement discuter? J'aimerais avoir de vos nouvelles. N'hésitez pas à me contacter via l'un des canaux ci-dessous.",
+    "info": {
+      "title": "Informations de Contact",
+      "email": {
+        "label": "Email",
+        "value": "votre.email@exemple.com"
+      },
+      "phone": {
+        "label": "Téléphone",
+        "value": "+1 (555) 123-4567"
+      },
+      "location": {
+        "label": "Localisation",
+        "value": "San Francisco, CA"
+      },
+      "social": {
+        "title": "Connectez-Vous Avec Moi"
+      }
+    },
+    "form": {
+      "title": "Envoyer un Message",
+      "description": "Remplissez le formulaire ci-dessous et je vous répondrai dès que possible.",
+      "name": {
+        "label": "Nom",
+        "placeholder": "Votre nom"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "votre.email@exemple.com"
+      },
+      "subject": {
+        "label": "Sujet",
+        "placeholder": "De quoi s'agit-il?"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Votre message..."
+      },
+      "send": "Envoyer le Message",
+      "sending": "Envoi...",
+      "success": "Message envoyé avec succès!",
+      "error": "Échec de l'envoi du message. Veuillez réessayer."
+    }
   },
   "projects": {
     "title": "Mes Projets",
@@ -25,19 +199,9 @@
     "technologies_used": "Technologies Utilisées",
     "no_projects": "Aucun projet trouvé"
   },
-  "contact": {
-    "title": "Contactez-Moi",
-    "subtitle": "Discutons de votre prochain projet",
-    "form": {
-      "name": "Nom",
-      "email": "Email",
-      "subject": "Sujet",
-      "message": "Message",
-      "send": "Envoyer le Message",
-      "sending": "Envoi...",
-      "success": "Message envoyé avec succès!",
-      "error": "Échec de l'envoi du message. Veuillez réessayer."
-    }
+  "footer": {
+    "copyright": "© 2024 Portfolio. Fait avec",
+    "tagline": "et des technologies de pointe."
   },
   "common": {
     "loading": "Chargement...",

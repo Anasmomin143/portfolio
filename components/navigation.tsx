@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface NavigationProps {
   lang: string;
@@ -10,7 +11,8 @@ interface NavigationProps {
 
 export function Navigation({ lang }: NavigationProps) {
   const pathname = usePathname();
-  
+  const t = useTranslations('navigation');
+
   const isActive = (path: string) => {
     if (path === `/${lang}`) {
       return pathname === `/${lang}` || pathname === '/';
@@ -19,11 +21,11 @@ export function Navigation({ lang }: NavigationProps) {
   };
 
   const navItems = [
-    { href: `/${lang}`, label: 'Home' },
-    { href: `/${lang}/services`, label: 'Services' },
-    { href: `/${lang}/projects`, label: 'My Projects' },
-    { href: `/${lang}/about`, label: 'About' },
-    { href: `/${lang}/contact`, label: 'Contact' },
+    { href: `/${lang}`, label: t('home') },
+    { href: `/${lang}/services`, label: t('services') },
+    { href: `/${lang}/projects`, label: t('projects') },
+    { href: `/${lang}/about`, label: t('about') },
+    { href: `/${lang}/contact`, label: t('contact') },
   ];
 
   return (

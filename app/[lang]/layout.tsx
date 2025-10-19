@@ -6,6 +6,8 @@ import { GlassModeToggle } from '@/components/glass-mode-toggle';
 import { MobileNav } from '@/components/mobile-nav';
 import { Navigation } from '@/components/navigation';
 import { Sparkles, Globe, Heart, Menu } from 'lucide-react';
+import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 import '@/app/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -18,10 +20,14 @@ export default async function LocaleLayout({
   params: Promise<LocaleParams>;
 }) {
   const { lang } = await params;
+  setRequestLocale(lang);
+  const t = await getTranslations();
+  const messages = await getMessages();
 
   return (
     <html lang={lang} className={inter.className}>
       <body className="min-h-screen antialiased" style={{ background: 'var(--color-background)' }}>
+        <NextIntlClientProvider messages={messages}>
           <header className="sticky top-0 z-50 backdrop-blur-xl" style={{ 
             background: 'var(--color-surface)', 
             borderBottom: '1px solid var(--color-primary)'
@@ -57,12 +63,12 @@ export default async function LocaleLayout({
                   </div>
                   
                   {/* Contact Button */}
-                  <Link 
-                    href={`/${lang}/about`}
+                  <Link
+                    href={`/${lang}/contact`}
                     className="px-6 py-2 text-white font-medium rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-lg"
                     style={{ background: 'var(--gradient-primary)' }}
                   >
-                    Contact
+                    {t('navigation.contact')}
                   </Link>
 
                   <MobileNav lang={lang} />
@@ -74,10 +80,11 @@ export default async function LocaleLayout({
           <footer className="border-t mt-auto" style={{ background: 'var(--gradient-secondary)', borderColor: 'var(--color-primary)' }}>
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
               <p className="text-center text-sm font-medium flex items-center justify-center gap-2" style={{ color: 'var(--color-muted)' }}>
-                © 2024 Portfolio. Made with <Heart className="w-4 h-4 text-red-500" /> and cutting-edge tech.
+                {t('footer.copyright')} <Heart className="w-4 h-4 text-red-500" /> {t('footer.tagline')}
               </p>
             </div>
           </footer>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

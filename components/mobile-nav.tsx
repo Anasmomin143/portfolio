@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Menu, X, Globe } from 'lucide-react';
 import { ThemeSelector } from '@/components/theme-selector';
 import { GlassModeToggle } from '@/components/glass-mode-toggle';
+import { useTranslations } from 'next-intl';
 
 interface MobileNavProps {
   lang: string;
@@ -12,6 +13,7 @@ interface MobileNavProps {
 
 export function MobileNav({ lang }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations('navigation');
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -44,7 +46,7 @@ export function MobileNav({ lang }: MobileNavProps) {
               style={{ color: 'var(--color-text)' }}
               onClick={() => setIsOpen(false)}
             >
-              Home
+              {t('home')}
             </Link>
             <Link
               href={`/${lang}/services`}
@@ -52,7 +54,7 @@ export function MobileNav({ lang }: MobileNavProps) {
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
-              Services
+              {t('services')}
             </Link>
             <Link
               href={`/${lang}/projects`}
@@ -60,7 +62,7 @@ export function MobileNav({ lang }: MobileNavProps) {
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
-              My Projects
+              {t('projects')}
             </Link>
             <Link
               href={`/${lang}/about`}
@@ -68,7 +70,7 @@ export function MobileNav({ lang }: MobileNavProps) {
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
-              About
+              {t('about')}
             </Link>
             <Link
               href={`/${lang}/contact`}
@@ -76,7 +78,7 @@ export function MobileNav({ lang }: MobileNavProps) {
               style={{ color: 'var(--color-muted)' }}
               onClick={() => setIsOpen(false)}
             >
-              Contact
+              {t('contact')}
             </Link>
             <div className="pt-4 flex items-center justify-between" style={{ borderTop: '1px solid var(--color-primary)' }}>
               <div className="flex items-center space-x-3">
