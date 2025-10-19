@@ -1,8 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ReactNode, useState, useEffect } from 'react';
-import { getAnimationConfig, getDeviceCapabilities, getEntranceVariant } from '@/lib/animation-utils';
+import { ReactNode } from 'react';
 
 interface StaggerContainerProps {
   children: ReactNode;
@@ -10,39 +9,21 @@ interface StaggerContainerProps {
   staggerDelay?: number;
 }
 
-export function StaggerContainer({ 
-  children, 
+export function StaggerContainer({
+  children,
   className = '',
-  staggerDelay
+  staggerDelay = 0.15
 }: StaggerContainerProps) {
-  const [animationConfig, setAnimationConfig] = useState(getAnimationConfig());
-  const [deviceCapabilities, setDeviceCapabilities] = useState(getDeviceCapabilities());
-  
-  useEffect(() => {
-    const updateAnimations = () => {
-      setAnimationConfig(getAnimationConfig());
-      setDeviceCapabilities(getDeviceCapabilities());
-    };
-    
-    updateAnimations();
-    window.addEventListener('resize', updateAnimations);
-    return () => window.removeEventListener('resize', updateAnimations);
-  }, []);
-  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: staggerDelay || animationConfig.stagger,
-        delayChildren: deviceCapabilities.isMobile ? 0.1 : 0.2
+        staggerChildren: staggerDelay,
+        delayChildren: 0.2
       }
     }
   };
-
-  if (deviceCapabilities.prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
 
   return (
     <motion.div
@@ -62,116 +43,31 @@ interface StaggerItemProps {
   index?: number;
 }
 
-export function StaggerItem({ 
-  children, 
+export function StaggerItem({
+  children,
   className = '',
   index = 0
 }: StaggerItemProps) {
-  const [animationConfig, setAnimationConfig] = useState(getAnimationConfig());
-  const [deviceCapabilities, setDeviceCapabilities] = useState(getDeviceCapabilities());
-  const [variant, setVariant] = useState('slideUp');
-  
-  useEffect(() => {
-    const updateAnimations = () => {
-      setAnimationConfig(getAnimationConfig());
-      setDeviceCapabilities(getDeviceCapabilities());
-      if (typeof window !== 'undefined') {
-        setVariant(getEntranceVariant(index, window.innerWidth));
-      }
-    };
-    
-    updateAnimations();
-    window.addEventListener('resize', updateAnimations);
-    return () => window.removeEventListener('resize', updateAnimations);
-  }, [index]);
-
-  const variants = {
-    slideUp: {
-      hidden: { opacity: 0, y: 30 },
-      visible: { 
-        opacity: 1, 
-        y: 0,
-        transition: animationConfig
-      }
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      filter: 'blur(4px)',
+      y: 10
     },
-    slideLeft: {
-      hidden: { opacity: 0, x: -30 },
-      visible: { 
-        opacity: 1, 
-        x: 0,
-        transition: animationConfig
-      }
-    },
-    slideRight: {
-      hidden: { opacity: 0, x: 30 },
-      visible: { 
-        opacity: 1, 
-        x: 0,
-        transition: animationConfig
-      }
-    },
-    scale: {
-      hidden: { opacity: 0, scale: 0.9 },
-      visible: { 
-        opacity: 1, 
-        scale: 1,
-        transition: animationConfig
-      }
-    },
-    rotate: {
-      hidden: { opacity: 0, rotate: -5, scale: 0.95 },
-      visible: { 
-        opacity: 1, 
-        rotate: 0, 
-        scale: 1,
-        transition: animationConfig
-      }
-    },
-    flip: {
-      hidden: { opacity: 0, rotateY: -45 },
-      visible: { 
-        opacity: 1, 
-        rotateY: 0,
-        transition: animationConfig
-      }
-    },
-    bounce: {
-      hidden: { opacity: 0, y: -20, scale: 0.8 },
-      visible: { 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-        transition: { 
-          ...animationConfig, 
-          type: 'spring',
-          stiffness: 400,
-          damping: 15
-        }
-      }
-    },
-    elastic: {
-      hidden: { opacity: 0, scale: 0.5, rotate: 45 },
-      visible: { 
-        opacity: 1, 
-        scale: 1, 
-        rotate: 0,
-        transition: { 
-          ...animationConfig, 
-          type: 'spring',
-          stiffness: 300,
-          damping: 10
-        }
+    visible: {
+      opacity: 1,
+      filter: 'blur(0px)',
+      y: 0,
+      transition: {
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1]
       }
     }
   };
 
-  if (deviceCapabilities.prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
   return (
     <motion.div
-      variants={variants[variant as keyof typeof variants]}
+      variants={itemVariants}
       className={className}
     >
       {children}

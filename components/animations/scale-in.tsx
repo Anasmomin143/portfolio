@@ -1,8 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ReactNode, useState, useEffect } from 'react';
-import { getAnimationConfig, getDeviceCapabilities } from '@/lib/animation-utils';
+import { ReactNode } from 'react';
 
 interface ScaleInProps {
   children: ReactNode;
@@ -11,41 +10,28 @@ interface ScaleInProps {
   className?: string;
 }
 
-export function ScaleIn({ 
-  children, 
-  delay = 0, 
-  duration,
+export function ScaleIn({
+  children,
+  delay = 0,
+  duration = 1.2,
   className = ''
 }: ScaleInProps) {
-  const [animationConfig, setAnimationConfig] = useState(getAnimationConfig());
-  const [deviceCapabilities, setDeviceCapabilities] = useState(getDeviceCapabilities());
-  
-  useEffect(() => {
-    const updateAnimations = () => {
-      setAnimationConfig(getAnimationConfig());
-      setDeviceCapabilities(getDeviceCapabilities());
-    };
-    
-    updateAnimations();
-    window.addEventListener('resize', updateAnimations);
-    return () => window.removeEventListener('resize', updateAnimations);
-  }, []);
-
-  if (deviceCapabilities.prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
   return (
     <motion.div
-      initial={{ scale: deviceCapabilities.isMobile ? 0.9 : 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
+      initial={{
+        opacity: 0,
+        filter: 'blur(4px)',
+        scale: 0.98
+      }}
+      animate={{
+        opacity: 1,
+        filter: 'blur(0px)',
+        scale: 1
+      }}
       transition={{
-        duration: duration || animationConfig.duration,
+        duration,
         delay,
-        ease: animationConfig.ease || [0.4, 0, 0.2, 1],
-        type: animationConfig.type || "spring",
-        stiffness: animationConfig.stiffness || 300,
-        damping: animationConfig.damping || 25
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >

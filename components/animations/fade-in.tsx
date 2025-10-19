@@ -1,8 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ReactNode, useState, useEffect } from 'react';
-import { getAnimationConfig, getDeviceCapabilities } from '@/lib/animation-utils';
+import { ReactNode } from 'react';
 
 interface FadeInProps {
   children: ReactNode;
@@ -12,47 +11,29 @@ interface FadeInProps {
   className?: string;
 }
 
-export function FadeIn({ 
-  children, 
-  delay = 0, 
-  duration, 
+export function FadeIn({
+  children,
+  delay = 0,
+  duration = 1.2,
   direction = 'up',
   className = ''
 }: FadeInProps) {
-  const [animationConfig, setAnimationConfig] = useState(getAnimationConfig());
-  const [deviceCapabilities, setDeviceCapabilities] = useState(getDeviceCapabilities());
-  
-  useEffect(() => {
-    const updateAnimations = () => {
-      setAnimationConfig(getAnimationConfig());
-      setDeviceCapabilities(getDeviceCapabilities());
-    };
-    
-    updateAnimations();
-    window.addEventListener('resize', updateAnimations);
-    return () => window.removeEventListener('resize', updateAnimations);
-  }, []);
-
-  const directionVariants = {
-    up: { y: deviceCapabilities.isMobile ? 20 : 30, opacity: 0 },
-    down: { y: deviceCapabilities.isMobile ? -20 : -30, opacity: 0 },
-    left: { x: deviceCapabilities.isMobile ? 20 : 30, opacity: 0 },
-    right: { x: deviceCapabilities.isMobile ? -20 : -30, opacity: 0 }
-  };
-
-  if (deviceCapabilities.prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
   return (
     <motion.div
-      initial={directionVariants[direction]}
-      animate={{ x: 0, y: 0, opacity: 1 }}
+      initial={{
+        opacity: 0,
+        filter: 'blur(4px)',
+        y: 10
+      }}
+      animate={{
+        opacity: 1,
+        filter: 'blur(0px)',
+        y: 0
+      }}
       transition={{
-        duration: duration || animationConfig.duration,
-        delay: delay,
-        ease: animationConfig.ease || [0.4, 0, 0.2, 1],
-        type: animationConfig.type
+        duration,
+        delay,
+        ease: [0.16, 1, 0.3, 1], // Smooth, elegant easing
       }}
       className={className}
     >
