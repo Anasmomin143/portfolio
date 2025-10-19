@@ -202,7 +202,12 @@
   },
   "footer": {
     "copyright": "© 2024 Portfolio. Made with",
-    "tagline": "and cutting-edge tech."
+    "tagline": "Building modern web applications with passion and cutting-edge technology.",
+    "quickLinks": "Quick Links",
+    "services": "Services",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
   },
   "common": {
     "loading": "Loading...",

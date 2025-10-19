@@ -202,7 +202,12 @@
   },
   "footer": {
     "copyright": "© 2024 Portfolio. Fait avec",
-    "tagline": "et des technologies de pointe."
+    "tagline": "Création d'applications web modernes avec passion et technologie de pointe.",
+    "quickLinks": "Liens Rapides",
+    "services": "Services",
+    "contact": "Contact",
+    "privacy": "Politique de Confidentialité",
+    "terms": "Conditions d'Utilisation"
   },
   "common": {
     "loading": "Chargement...",
