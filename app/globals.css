@@ -9,11 +9,20 @@
   --color-background: rgb(248, 250, 252);
   --color-text: rgb(15, 23, 42);
   --color-muted: rgb(100, 116, 139);
-  
+
+  /* Transparent header */
+  --header-background: rgba(255, 255, 255, 0.02);
+  --header-background-scrolled: rgba(255, 255, 255, 0.5);
+  --header-border: rgba(0, 0, 0, 0.08);
+
+  /* Transparent cards */
+  --card-background: rgba(255, 255, 255, 0.4);
+  --card-border: rgba(168, 85, 247, 0.15);
+
   --gradient-primary: linear-gradient(135deg, rgb(168, 85, 247), rgb(147, 51, 234));
-  --gradient-secondary: linear-gradient(135deg, rgb(252, 247, 255), rgb(243, 232, 255));
-  --gradient-hero: linear-gradient(135deg, rgb(250, 245, 255), rgb(243, 232, 255), rgb(168, 85, 247, 0.1));
-  --gradient-card: linear-gradient(135deg, rgb(254, 251, 255), rgb(249, 240, 255));
+  --gradient-secondary: linear-gradient(135deg, rgba(252, 247, 255, 0.3), rgba(243, 232, 255, 0.3));
+  --gradient-hero: linear-gradient(135deg, rgba(250, 245, 255, 0.5), rgba(243, 232, 255, 0.5), rgba(168, 85, 247, 0.1));
+  --gradient-card: linear-gradient(135deg, rgba(254, 251, 255, 0.4), rgba(249, 240, 255, 0.4));
 }
 
 /* Global smooth transitions for theme switching */
@@ -102,6 +111,18 @@
 .stagger-3 { animation-delay: 0.3s; }
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
+
+/* Transparent Card Styles - Glassmorphism */
+[class*="card"],
+[data-card],
+.card {
+  background: var(--card-background) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--card-border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+}
 
 /* Theme dropdown positioning - removed conflicting styles */
 

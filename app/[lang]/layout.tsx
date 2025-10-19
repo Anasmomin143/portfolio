@@ -10,6 +10,7 @@ import '@/app/globals.css';
 const ThemeSelector = dynamic(() => import('@/components/theme-selector').then(mod => ({ default: mod.ThemeSelector })));
 const MobileNav = dynamic(() => import('@/components/mobile-nav').then(mod => ({ default: mod.MobileNav })));
 const Navigation = dynamic(() => import('@/components/navigation').then(mod => ({ default: mod.Navigation })));
+const SmoothHeader = dynamic(() => import('@/components/smooth-header').then(mod => ({ default: mod.SmoothHeader })));
 
 // Dynamic imports for icons (used in server component)
 const Globe = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Globe })));
@@ -33,16 +34,7 @@ export default async function LocaleLayout({
     <html lang={lang} className={inter.className}>
       <body className="min-h-screen antialiased" style={{ background: 'var(--color-background)' }}>
         <NextIntlClientProvider messages={messages}>
-          <header className="sticky top-0 z-50 backdrop-blur-xl" style={{ 
-            background: 'var(--color-surface)', 
-            borderBottom: '1px solid var(--color-primary)'
-          }}>
-            {/* Theme-aware header background */}
-            <div className="absolute inset-0" style={{ 
-              background: 'var(--gradient-secondary)',
-              backdropFilter: 'blur(20px)'
-            }}></div>
-            
+          <SmoothHeader>
             <nav className="relative mx-auto max-w-7xl px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
                 {/* Logo */}
@@ -80,7 +72,7 @@ export default async function LocaleLayout({
                 </div>
               </div>
             </nav>
-          </header>
+          </SmoothHeader>
           <main className="flex-1">{children}</main>
           <footer className="border-t mt-auto" style={{ background: 'var(--gradient-secondary)', borderColor: 'var(--color-primary)' }}>
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

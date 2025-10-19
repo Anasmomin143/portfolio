@@ -136,7 +136,7 @@ export const getTheme = (themeId: string): Theme => {
 
 export const applyTheme = (theme: Theme) => {
   const root = document.documentElement;
-  
+
   // Apply CSS custom properties
   root.style.setProperty('--color-primary', theme.colors.primary);
   root.style.setProperty('--color-secondary', theme.colors.secondary);
@@ -145,16 +145,39 @@ export const applyTheme = (theme: Theme) => {
   root.style.setProperty('--color-background', theme.colors.background);
   root.style.setProperty('--color-text', theme.colors.text);
   root.style.setProperty('--color-muted', theme.colors.muted);
-  
+
   // Apply gradients
   root.style.setProperty('--gradient-primary', theme.gradients.primary);
   root.style.setProperty('--gradient-secondary', theme.gradients.secondary);
   root.style.setProperty('--gradient-hero', theme.gradients.hero);
   root.style.setProperty('--gradient-card', theme.gradients.card);
-  
+
+  // Apply transparent header and card colors based on theme
+  const isDarkTheme = theme.id === 'dark';
+
+  // Extract RGB values from primary color for card border
+  const primaryColor = theme.colors.primary.match(/\d+/g);
+  const cardBorderColor = primaryColor
+    ? `rgba(${primaryColor[0]}, ${primaryColor[1]}, ${primaryColor[2]}, 0.15)`
+    : 'rgba(168, 85, 247, 0.15)';
+
+  if (isDarkTheme) {
+    root.style.setProperty('--header-background', 'rgba(15, 23, 42, 0.02)');
+    root.style.setProperty('--header-background-scrolled', 'rgba(15, 23, 42, 0.5)');
+    root.style.setProperty('--header-border', 'rgba(255, 255, 255, 0.08)');
+    root.style.setProperty('--card-background', 'rgba(30, 41, 59, 0.4)');
+    root.style.setProperty('--card-border', cardBorderColor);
+  } else {
+    root.style.setProperty('--header-background', 'rgba(255, 255, 255, 0.02)');
+    root.style.setProperty('--header-background-scrolled', 'rgba(255, 255, 255, 0.5)');
+    root.style.setProperty('--header-border', 'rgba(0, 0, 0, 0.08)');
+    root.style.setProperty('--card-background', 'rgba(255, 255, 255, 0.4)');
+    root.style.setProperty('--card-border', cardBorderColor);
+  }
+
   // Handle theme classes (only dark mode, glass mode is handled separately)
   root.classList.remove('dark');
-  
+
   if (theme.id === 'dark') {
     root.classList.add('dark');
   }
