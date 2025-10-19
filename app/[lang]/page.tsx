@@ -5,7 +5,7 @@ import { ScaleIn } from '@/components/animations/scale-in';
 import { StaggerContainer, StaggerItem } from '@/components/animations/stagger-container';
 import { FloatingElement } from '@/components/animations/floating-element';
 import { HoverCard } from '@/components/animations/hover-card';
-import { Rocket, Globe, Briefcase, Zap, Smartphone, Sparkles } from 'lucide-react';
+import { Rocket, Globe, Briefcase, Zap, Smartphone, Sparkles, Download } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 export default async function HomePage({ params }: { params: Promise<LocaleParams> }) {
@@ -89,6 +89,19 @@ export default async function HomePage({ params }: { params: Promise<LocaleParam
                 {t('cta.viewProjects')}
                 <Briefcase className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
               </Link>
+            </HoverCard>
+          </StaggerItem>
+          <StaggerItem>
+            <HoverCard scaleOnHover={1.08} rotateOnHover={-1}>
+              <a
+                href="/resume.pdf"
+                download="Resume.pdf"
+                className="group inline-flex items-center rounded-xl px-8 py-4 text-base font-semibold text-white shadow-medium hover:shadow-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all duration-300"
+                style={{ background: 'var(--gradient-primary)', outlineColor: 'var(--color-primary)' }}
+              >
+                {t('cta.downloadResume')}
+                <Download className="ml-2 w-5 h-5 group-hover:translate-y-1 transition-transform duration-300" />
+              </a>
             </HoverCard>
           </StaggerItem>
         </StaggerContainer>
