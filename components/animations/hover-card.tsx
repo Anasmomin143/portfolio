@@ -48,10 +48,11 @@ export function HoverCard({
   
   return (
     <motion.div
+      // @ts-expect-error - framer-motion type incompatibility with custom transition variants
       whileHover={finalHoverVariant}
       whileTap={tapVariant}
-      transition={{ 
-        duration: deviceCapabilities.isMobile ? 0.15 : 0.25, 
+      transition={{
+        duration: deviceCapabilities.isMobile ? 0.15 : 0.25,
         ease: [0.4, 0, 0.2, 1],
         type: deviceCapabilities.isHighPerformance ? 'spring' : 'tween',
         stiffness: 300,

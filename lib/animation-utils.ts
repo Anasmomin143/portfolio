@@ -89,22 +89,75 @@ export const getEntranceVariant = (index: number, screenWidth: number) => {
   }
 };
 
-// Interactive hover variants
+// Interactive hover variants with modern effects
 export const getHoverVariant = (element: string, isHighPerformance: boolean) => {
   const baseVariants = {
-    card: { scale: 1.03, y: -4 },
-    button: { scale: 1.05, y: -2 },
-    icon: { scale: 1.2, rotate: 5 },
-    text: { scale: 1.02, x: 4 }
+    card: {
+      scale: 1.02,
+      y: -8,
+      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+    },
+    button: {
+      scale: 1.05,
+      y: -2,
+      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
+    },
+    icon: {
+      scale: 1.15,
+      rotate: 5,
+      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
+    },
+    text: {
+      scale: 1.01,
+      x: 4,
+      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
+    }
   };
-  
+
   const enhancedVariants = {
-    card: { scale: 1.05, y: -8, rotateX: 5, rotateY: 2 },
-    button: { scale: 1.08, y: -4, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' },
-    icon: { scale: 1.3, rotate: 15, y: -2 },
-    text: { scale: 1.05, x: 8, textShadow: '0 2px 8px rgba(0,0,0,0.1)' }
+    card: {
+      scale: 1.03,
+      y: -12,
+      rotateX: 2,
+      rotateY: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 300,
+        damping: 20
+      }
+    },
+    button: {
+      scale: 1.06,
+      y: -3,
+      boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+      transition: {
+        type: 'spring',
+        stiffness: 400,
+        damping: 25
+      }
+    },
+    icon: {
+      scale: 1.25,
+      rotate: 12,
+      y: -3,
+      transition: {
+        type: 'spring',
+        stiffness: 500,
+        damping: 15
+      }
+    },
+    text: {
+      scale: 1.02,
+      x: 6,
+      textShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      transition: {
+        type: 'spring',
+        stiffness: 400,
+        damping: 20
+      }
+    }
   };
-  
-  return isHighPerformance ? enhancedVariants[element as keyof typeof enhancedVariants] || enhancedVariants.card 
+
+  return isHighPerformance ? enhancedVariants[element as keyof typeof enhancedVariants] || enhancedVariants.card
                            : baseVariants[element as keyof typeof baseVariants] || baseVariants.card;
 };

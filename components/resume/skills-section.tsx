@@ -2,7 +2,8 @@
 
 import { useSkills } from '@/hooks/useResumeData';
 import { SectionContainer } from '@/components/common/section-container';
-import { COMMON_INLINE_STYLES, THEME_GRADIENTS, TAILWIND_PATTERNS } from '@/lib/constants/styles';
+import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
+import { Chip, ChipGroup } from '@/components/ui/chip';
 import { StaggerItem } from '@/components/animations/stagger-container';
 import { HoverCard } from '@/components/animations/hover-card';
 
@@ -45,27 +46,24 @@ export function SkillsSection() {
       {skillCategories.map((category, catIndex) => (
         <StaggerItem key={category.title} index={catIndex}>
           <HoverCard element="text">
-            <div className="p-6 rounded-xl" style={{ background: THEME_GRADIENTS.card }}>
+            <div className="p-6 rounded-xl card-hover" style={{ background: THEME_GRADIENTS.card }}>
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2" style={COMMON_INLINE_STYLES.text}>
                 <span className="w-1 h-6 rounded-full" style={{ background: category.color }}></span>
                 {category.title}
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <ChipGroup>
                 {category.skills.map((skill, idx) => (
-                  <span
+                  <Chip
                     key={idx}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg ${TAILWIND_PATTERNS.hoverScale}`}
-                    style={{
-                      background: THEME_GRADIENTS.secondary,
-                      color: category.color,
-                      border: `1px solid ${category.color}`,
-                      opacity: 0.9
-                    }}
+                    variant="secondary"
+                    size="md"
+                    color={category.color}
+                    animated={true}
                   >
                     {skill}
-                  </span>
+                  </Chip>
                 ))}
-              </div>
+              </ChipGroup>
             </div>
           </HoverCard>
         </StaggerItem>

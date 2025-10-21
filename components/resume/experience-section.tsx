@@ -49,7 +49,7 @@ export function ExperienceSection() {
         <StaggerItem key={exp.id} index={index}>
           <HoverCard element="text">
             <div
-              className="pl-6 p-6 rounded-r-2xl shadow-soft hover:shadow-medium transition-all duration-300"
+              className="pl-6 p-6 rounded-r-2xl card-hover"
               style={{
                 borderLeft: `4px solid ${exp.current ? 'var(--color-primary)' : 'var(--color-secondary)'}`,
                 background: THEME_GRADIENTS.card

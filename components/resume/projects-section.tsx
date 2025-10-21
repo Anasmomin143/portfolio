@@ -5,9 +5,10 @@ import { SectionContainer } from '@/components/common/section-container';
 import { TechBadgeList } from '@/components/ui/tech-badge';
 import { formatDate } from '@/lib/utils/dateUtils';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS, TAILWIND_PATTERNS } from '@/lib/constants/styles';
+import { Chip } from '@/components/ui/chip';
 import { StaggerItem } from '@/components/animations/stagger-container';
 import { HoverCard } from '@/components/animations/hover-card';
-import { Building, Calendar, ExternalLink, Github } from 'lucide-react';
+import { Building, Calendar, ExternalLink, Github as GithubIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export function ProjectsSection() {
@@ -19,7 +20,7 @@ export function ProjectsSection() {
         <StaggerItem key={project.id} index={index}>
           <HoverCard element="card">
             <div
-              className={`theme-card ${TAILWIND_PATTERNS.card} ${TAILWIND_PATTERNS.cardHover} backdrop-blur-sm overflow-hidden h-full flex flex-col`}
+              className={`theme-card card-hover ${TAILWIND_PATTERNS.card} backdrop-blur-sm overflow-hidden h-full flex flex-col`}
               style={{ borderColor: 'var(--color-primary)' }}
             >
               {/* Project Header */}
@@ -35,12 +36,9 @@ export function ProjectsSection() {
                     </div>
                   </div>
                   {project.current && (
-                    <span className="px-3 py-1 text-xs font-semibold rounded-full animate-pulse" style={{
-                      background: THEME_GRADIENTS.primary,
-                      color: 'white'
-                    }}>
+                    <Chip variant="primary" size="sm" className="animate-pulse">
                       Active
-                    </span>
+                    </Chip>
                   )}
                 </div>
 
@@ -97,7 +95,7 @@ export function ProjectsSection() {
                           border: '1px solid var(--color-primary)'
                         }}
                       >
-                        <Github className="w-4 h-4" />
+                        <GithubIcon className="w-4 h-4" />
                         Code
                       </Link>
                     )}
