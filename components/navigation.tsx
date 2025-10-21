@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import { NAV_ITEMS } from '@/lib/constants/navigation';
+import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 
 interface NavigationProps {
   lang: string;
@@ -20,13 +22,10 @@ export function Navigation({ lang }: NavigationProps) {
     return pathname.startsWith(path);
   };
 
-  const navItems = [
-    { href: `/${lang}`, label: t('home') },
-    { href: `/${lang}/services`, label: t('services') },
-    { href: `/${lang}/projects`, label: t('projects') },
-    { href: `/${lang}/about`, label: t('about') },
-    { href: `/${lang}/contact`, label: t('contact') },
-  ];
+  const navItems = NAV_ITEMS.map(item => ({
+    href: item.href.replace('[lang]', lang),
+    label: t(item.label)
+  }));
 
   return (
     <div 
@@ -48,13 +47,13 @@ export function Navigation({ lang }: NavigationProps) {
           )}
           style={
             isActive(item.href)
-              ? { 
-                  background: 'var(--gradient-primary)', 
-                  color: 'white' 
+              ? {
+                  background: THEME_GRADIENTS.primary,
+                  color: 'white'
                 }
-              : { 
-                  color: 'var(--color-text)', 
-                  backgroundColor: 'transparent' 
+              : {
+                  ...COMMON_INLINE_STYLES.text,
+                  backgroundColor: 'transparent'
                 }
           }
         >

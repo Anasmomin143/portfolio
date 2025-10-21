@@ -110,13 +110,16 @@ export function DynamicEntrance({ children, index = 0, delay = 0, className }: D
     }
   };
 
+  const selectedVariant = variants[variant as keyof typeof variants];
+
   return (
     <motion.div
       className={className}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-10%' }}
-      variants={variants[variant as keyof typeof variants]}
+      // @ts-expect-error - framer-motion types are incompatible with transition union types
+      variants={selectedVariant}
     >
       {children}
     </motion.div>

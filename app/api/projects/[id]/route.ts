@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProjectById } from '@/lib/data';
 
-type Params = {
-  params: {
+type RouteContext = {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, context: RouteContext) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const project = await getProjectById(id);
     
     if (!project) {
@@ -29,10 +29,10 @@ export async function GET(request: NextRequest, { params }: Params) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: Params) {
+export async function PUT(request: NextRequest, context: RouteContext) {
   try {
     // TODO: Add authentication middleware to ensure only admin can update projects
-    const { id } = params;
+    const { id } = await context.params;
     const body = await request.json();
     
     const existingProject = await getProjectById(id);
@@ -65,10 +65,10 @@ export async function PUT(request: NextRequest, { params }: Params) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
     // TODO: Add authentication middleware to ensure only admin can delete projects
-    const { id } = params;
+    const { id } = await context.params;
     
     const existingProject = await getProjectById(id);
     if (!existingProject) {

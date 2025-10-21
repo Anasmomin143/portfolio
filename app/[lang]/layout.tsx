@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { LocaleParams } from '@/types';
+import { Locale } from '@/types';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import resumeData from '@/data/resume.json';
@@ -25,13 +25,16 @@ const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: 
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default async function LocaleLayout({
-  children,
-  params
-}: {
+export function generateStaticParams() {
+  return [{ lang: 'en' as Locale }, { lang: 'fr' as Locale }];
+}
+
+type Props = {
   children: React.ReactNode;
-  params: Promise<LocaleParams>;
-}) {
+  params: Promise<{ lang: string }>;
+};
+
+export default async function LocaleLayout({ children, params }: Props) {
   const { lang } = await params;
   setRequestLocale(lang);
   const t = await getTranslations();

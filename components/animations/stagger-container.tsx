@@ -67,6 +67,7 @@ export function StaggerItem({
 
   return (
     <motion.div
+      // @ts-expect-error - framer-motion ease array type incompatibility
       variants={itemVariants}
       className={className}
     >
