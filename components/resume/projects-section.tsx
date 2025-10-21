@@ -5,15 +5,10 @@ import { SectionContainer } from '@/components/common/section-container';
 import { TechBadgeList } from '@/components/ui/tech-badge';
 import { formatDate } from '@/lib/utils/dateUtils';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS, TAILWIND_PATTERNS } from '@/lib/constants/styles';
-import dynamic from 'next/dynamic';
+import { StaggerItem } from '@/components/animations/stagger-container';
+import { HoverCard } from '@/components/animations/hover-card';
+import { Building, Calendar, ExternalLink, Github } from 'lucide-react';
 import Link from 'next/link';
-
-const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
-const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
-const Building = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Building })));
-const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Calendar })));
-const ExternalLink = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ExternalLink })));
-const Github = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Github })));
 
 export function ProjectsSection() {
   const { data: projects, loading, error } = useProjects();

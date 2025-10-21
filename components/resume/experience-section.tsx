@@ -5,13 +5,9 @@ import { SectionContainer } from '@/components/common/section-container';
 import { TechBadgeList } from '@/components/ui/tech-badge';
 import { formatDate } from '@/lib/utils/dateUtils';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
-import dynamic from 'next/dynamic';
-
-const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
-const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
-const Building = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Building })));
-const MapPin = dynamic(() => import('lucide-react').then(mod => ({ default: mod.MapPin })));
-const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Calendar })));
+import { StaggerItem } from '@/components/animations/stagger-container';
+import { HoverCard } from '@/components/animations/hover-card';
+import { Building, MapPin, Calendar } from 'lucide-react';
 
 const LoadingSkeleton = () => (
   <div className="space-y-6">

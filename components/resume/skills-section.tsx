@@ -3,10 +3,8 @@
 import { useSkills } from '@/hooks/useResumeData';
 import { SectionContainer } from '@/components/common/section-container';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS, TAILWIND_PATTERNS } from '@/lib/constants/styles';
-import dynamic from 'next/dynamic';
-
-const StaggerItem = dynamic(() => import('@/components/animations/stagger-container').then(mod => ({ default: mod.StaggerItem })));
-const HoverCard = dynamic(() => import('@/components/animations/hover-card').then(mod => ({ default: mod.HoverCard })));
+import { StaggerItem } from '@/components/animations/stagger-container';
+import { HoverCard } from '@/components/animations/hover-card';
 
 const LoadingSkeleton = () => {
   const badgeWidths = ['80px', '100px', '90px', '110px', '85px', '95px'];

@@ -39,6 +39,7 @@ export function Navigation({ lang }: NavigationProps) {
         <Link
           key={item.href}
           href={item.href}
+          prefetch={true}
           className={cn(
             'relative px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300',
             isActive(item.href)

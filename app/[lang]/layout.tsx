@@ -4,24 +4,16 @@ import dynamic from 'next/dynamic';
 import { Locale } from '@/types';
 import { getTranslations, setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
+import { Globe, Heart, Mail, Github, Linkedin, ArrowRight } from 'lucide-react';
 import resumeData from '@/data/resume.json';
 import '@/app/globals.css';
 
-// Dynamic imports for client components
+// Dynamic imports for client components only
 const ThemeSelector = dynamic(() => import('@/components/theme-selector').then(mod => ({ default: mod.ThemeSelector })));
 const MobileNav = dynamic(() => import('@/components/mobile-nav').then(mod => ({ default: mod.MobileNav })));
 const Navigation = dynamic(() => import('@/components/navigation').then(mod => ({ default: mod.Navigation })));
 const SmoothHeader = dynamic(() => import('@/components/smooth-header').then(mod => ({ default: mod.SmoothHeader })));
 const ScrollToTop = dynamic(() => import('@/components/scroll-to-top').then(mod => ({ default: mod.ScrollToTop })));
-
-// Dynamic imports for icons (used in server component)
-const Globe = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Globe })));
-const Heart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Heart })));
-const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })));
-const Github = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Github })));
-const Linkedin = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Linkedin })));
-const Twitter = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Twitter })));
-const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ArrowRight })));
 
 const inter = Inter({ subsets: ['latin'] });
 
