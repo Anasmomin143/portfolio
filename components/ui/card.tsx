@@ -1,12 +1,17 @@
 import { HTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: 'default' | 'static';
+}
+
+const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        'theme-card rounded-xl shadow-medium hover:shadow-strong transition-all duration-300 hover:scale-[1.02] backdrop-blur-sm',
+        'theme-card rounded-xl shadow-medium backdrop-blur-sm',
+        variant === 'default' && 'hover:shadow-strong transition-all duration-300 hover:scale-[1.02]',
         className
       )}
       {...props}

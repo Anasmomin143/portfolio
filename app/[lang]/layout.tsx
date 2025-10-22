@@ -33,9 +33,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <html lang={lang} className={inter.className}>
-      <body className="min-h-screen antialiased" style={{ background: 'var(--color-background)' }}>
-        <NextIntlClientProvider messages={messages}>
+    <div className={`${inter.className} min-h-screen antialiased`} style={{ background: 'var(--color-background)' }}>
+      <NextIntlClientProvider messages={messages}>
           <SmoothHeader>
             <nav className="relative mx-auto max-w-7xl px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
@@ -217,7 +216,6 @@ export default async function LocaleLayout({ children, params }: Props) {
           </footer>
           <ScrollToTop />
         </NextIntlClientProvider>
-      </body>
-    </html>
+    </div>
   );
 }

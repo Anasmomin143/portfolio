@@ -1,0 +1,61 @@
+{
+  "projects": [
+    {
+      "id": "sample-project-1",
+      "name": "E-commerce Platform Redesign",
+      "company": "TechRetail Inc.",
+      "description": "Led the complete redesign of a high-traffic e-commerce platform, implementing modern UI/UX practices and improving performance by 60%. Integrated advanced search functionality and personalized recommendations.",
+      "start_date": "2024-01-15",
+      "end_date": "2024-06-30",
+      "current": false,
+      "technologies": ["React", "Next.js", "TypeScript", "PostgreSQL", "Redis", "Stripe", "Tailwind CSS"],
+      "highlights": [
+        "Reduced page load time by 60% through optimization",
+        "Implemented real-time inventory sync across 5 warehouses",
+        "Integrated Stripe payment processing with 99.9% uptime",
+        "Built responsive design supporting 50K+ daily users"
+      ],
+      "demo_url": "https://example-ecommerce.com",
+      "github_url": "https://github.com/username/ecommerce-platform",
+      "display_order": 1
+    },
+    {
+      "id": "sample-project-2",
+      "name": "AI-Powered Analytics Dashboard",
+      "company": "DataInsights Corp",
+      "description": "Developed a comprehensive analytics dashboard with AI-powered insights for business intelligence. Integrated machine learning models for predictive analytics and automated reporting.",
+      "start_date": "2024-07-01",
+      "end_date": null,
+      "current": true,
+      "technologies": ["Vue.js", "Python", "FastAPI", "TensorFlow", "MongoDB", "D3.js", "Docker"],
+      "highlights": [
+        "Implemented real-time data visualization for 100+ metrics",
+        "Integrated ML models with 85% prediction accuracy",
+        "Automated report generation saving 20 hours/week",
+        "Deployed on Kubernetes for 99.99% availability"
+      ],
+      "demo_url": null,
+      "github_url": null,
+      "display_order": 2
+    },
+    {
+      "id": "sample-project-3",
+      "name": "Mobile Banking Application",
+      "company": "FinTech Solutions",
+      "description": "Built a secure mobile banking application from scratch with biometric authentication, real-time transaction tracking, and seamless money transfers. Compliant with PCI-DSS and SOC 2 standards.",
+      "start_date": "2023-09-01",
+      "end_date": "2024-02-28",
+      "current": false,
+      "technologies": ["React Native", "Node.js", "Express", "PostgreSQL", "AWS", "JWT", "Plaid API"],
+      "highlights": [
+        "Achieved 4.8/5 rating with 100K+ downloads",
+        "Implemented biometric auth (Face ID & Fingerprint)",
+        "Processed $5M+ in secure transactions",
+        "Zero security incidents since launch"
+      ],
+      "demo_url": "https://apps.apple.com/app/sample-bank",
+      "github_url": null,
+      "display_order": 3
+    }
+  ]
+}
