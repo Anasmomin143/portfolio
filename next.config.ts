@@ -26,6 +26,26 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+
+  // Development settings to reduce errors
+  onDemandEntries: {
+    // Period (in ms) where the server will keep pages in the buffer
+    maxInactiveAge: 25 * 1000,
+    // Number of pages that should be kept simultaneously without being disposed
+    pagesBufferLength: 2,
+  },
+
+  // Webpack configuration for better HMR
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      // Improve HMR stability
+      config.watchOptions = {
+        poll: 1000, // Check for changes every second
+        aggregateTimeout: 300, // Delay rebuild after the first change
+      };
+    }
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);
