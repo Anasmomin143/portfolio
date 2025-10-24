@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, ExternalLink, Github as GithubIcon, Calendar, Upload } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
-import { useDeleteConfirmation, useConfirmationDialog } from '@/hooks/use-delete-confirmation';
+import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
+import { PageHeader } from '@/components/admin';
 
 interface Project {
   id: string;
@@ -70,35 +71,24 @@ export default function ProjectsPage() {
 
   return (
     <div>
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2" style={COMMON_INLINE_STYLES.text}>
-                Projects
-              </h1>
-              <p className="text-lg" style={COMMON_INLINE_STYLES.textMuted}>
-                Manage your portfolio projects
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Link
-                href="/admin/projects/import"
-                className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]"
-                style={{ background: THEME_GRADIENTS.secondary, border: '1px solid var(--color-primary)', ...COMMON_INLINE_STYLES.text }}
-              >
-                <Upload className="w-5 h-5" />
-                Import JSON
-              </Link>
-              <Link
-                href="/admin/projects/new"
-                className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]"
-                style={{ background: THEME_GRADIENTS.primary, color: 'white' }}
-              >
-                <Plus className="w-5 h-5" />
-                Add Project
-              </Link>
-            </div>
-          </div>
+      <PageHeader
+        title="Projects"
+        description="Manage your portfolio projects"
+        actions={[
+          {
+            href: '/admin/projects/import',
+            label: 'Import JSON',
+            icon: Upload,
+            variant: 'secondary',
+          },
+          {
+            href: '/admin/projects/new',
+            label: 'Add Project',
+            icon: Plus,
+            variant: 'primary',
+          },
+        ]}
+      />
 
           {/* Error Message */}
           {error && (

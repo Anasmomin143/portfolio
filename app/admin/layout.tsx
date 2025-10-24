@@ -1,6 +1,5 @@
-
-import { AdminSidebar } from '@/components/admin';
-import { COMMON_INLINE_STYLES } from '@/lib/constants/styles';
+import { AuthSessionProvider } from '@/components/providers/session-provider';
+import { AdminLayoutWrapper } from '@/components/admin/admin-layout-wrapper';
 
 export default async function AdminLayout({
   children,
@@ -8,14 +7,8 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-
-      {/* Main Content */}
-      <main className="flex-1 p-6 pt-20 lg:pt-6 lg:ml-64 bg-gray-50">
-        {children}
-      </main>
-    </div>
+    <AuthSessionProvider>
+      <AdminLayoutWrapper>{children}</AdminLayoutWrapper>
+    </AuthSessionProvider>
   );
 }

@@ -6,6 +6,7 @@ import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, Calendar, MapPin } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
 import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
+import { PageHeader } from '@/components/admin';
 
 interface Experience {
   id: string;
@@ -81,25 +82,18 @@ export default function ExperiencePage() {
 
   return (
     <div>
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2" style={COMMON_INLINE_STYLES.text}>
-                Experience
-              </h1>
-              <p className="text-lg" style={COMMON_INLINE_STYLES.textMuted}>
-                Manage your work experience
-              </p>
-            </div>
-            <Link
-              href="/admin/experience/new"
-              className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]"
-              style={{ background: THEME_GRADIENTS.primary, color: 'white' }}
-            >
-              <Plus className="w-5 h-5" />
-              Add Experience
-            </Link>
-          </div>
+      <PageHeader
+        title="Experience"
+        description="Manage your work experience"
+        actions={[
+          {
+            href: '/admin/experience/new',
+            label: 'Add Experience',
+            icon: Plus,
+            variant: 'primary',
+          },
+        ]}
+      />
 
           {/* Error Message */}
           {error && (

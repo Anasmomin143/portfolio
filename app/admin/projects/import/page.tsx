@@ -4,7 +4,8 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
-import { ArrowLeft, Upload, FileJson, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Upload, FileJson, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { PageHeader } from '@/components/admin';
 
 interface ImportResult {
   success: boolean;
@@ -126,23 +127,12 @@ export default function ImportProjectsPage() {
 
   return (
     <div>
-          {/* Header */}
-          <div className="mb-8">
-            <Link
-              href="/admin/projects"
-              className="inline-flex items-center gap-2 text-sm mb-4 hover:underline"
-              style={COMMON_INLINE_STYLES.textMuted}
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Projects
-            </Link>
-            <h1 className="text-3xl font-bold mb-2" style={COMMON_INLINE_STYLES.text}>
-              Import Projects from JSON
-            </h1>
-            <p className="text-sm" style={COMMON_INLINE_STYLES.textMuted}>
-              Upload a JSON file or paste JSON data to bulk import projects
-            </p>
-          </div>
+      <PageHeader
+        title="Import Projects from JSON"
+        description="Upload a JSON file or paste JSON data to bulk import projects"
+        backHref="/admin/projects"
+        backLabel="Back to Projects"
+      />
 
           <div className="max-w-5xl">
             {/* Import Mode Selection */}

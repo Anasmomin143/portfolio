@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { FolderGit2, Briefcase, Layers, Award, TrendingUp, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { PageHeader } from '@/components/admin';
 
 interface Activity {
   id: string;
@@ -112,15 +113,10 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold mb-2" style={COMMON_INLINE_STYLES.text}>
-          Welcome back, {session?.user?.name || 'Admin'}!
-        </h1>
-        <p className="text-lg" style={COMMON_INLINE_STYLES.textMuted}>
-          Here&apos;s an overview of your portfolio data
-        </p>
-      </div>
+      <PageHeader
+        title={`Welcome back, ${session?.user?.name || 'Admin'}!`}
+        description="Here's an overview of your portfolio data"
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -18,5 +18,6 @@ export { PageHeader } from './page-header';
 export { DataCard, EditAction, DeleteAction } from './data-card';
 export { EmptyState } from './empty-state';
 
-// Keep existing
+// Admin Components
 export { AdminSidebar } from './admin-sidebar';
+export { AdminLayoutWrapper } from './admin-layout-wrapper';
