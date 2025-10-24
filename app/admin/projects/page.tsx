@@ -63,8 +63,13 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
+      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
+          <p className="text-sm" style={COMMON_INLINE_STYLES.textMuted}>
+            Loading projects...
+          </p>
+        </div>
       </div>
     );
   }

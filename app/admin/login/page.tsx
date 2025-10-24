@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Lock, Mail, AlertCircle, Loader2 } from 'lucide-react';
 
-export default function AdminLoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/admin';
@@ -225,5 +225,24 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-background)' }}>
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="w-12 h-12 animate-spin" style={{ color: 'var(--color-primary)' }} />
+            <p className="text-sm" style={COMMON_INLINE_STYLES.textMuted}>
+              Loading...
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

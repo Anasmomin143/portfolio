@@ -11,6 +11,7 @@ interface FormLayoutProps {
   submitLabel?: string;
   cancelHref?: string;
   cancelLabel?: string;
+  error?: string;
 }
 
 export function FormLayout({
@@ -21,9 +22,16 @@ export function FormLayout({
   submitLabel = 'Save',
   cancelHref,
   cancelLabel = 'Cancel',
+  error,
 }: FormLayoutProps) {
   return (
     <form onSubmit={onSubmit} className="max-w-4xl space-y-6">
+      {error && (
+        <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+          {error}
+        </div>
+      )}
+
       <Card variant="static">
         {title && (
           <CardHeader>
