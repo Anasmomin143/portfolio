@@ -1,4 +1,5 @@
-import { AdminSidebar } from '@/components/admin/admin-sidebar';
+
+import { AdminSidebar } from '@/components/admin';
 import { COMMON_INLINE_STYLES } from '@/lib/constants/styles';
 
 export default async function AdminLayout({
@@ -6,6 +7,15 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Login page and auth pages render without sidebar
-  return <>{children}</>;
+  return (
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <AdminSidebar user={{ email: '', name: 'Admin' }} />
+
+      {/* Main Content */}
+      <main className="flex-1 p-6 pt-20 lg:pt-6 lg:ml-64 bg-gray-50">
+        {children}
+      </main>
+    </div>
+  );
 }

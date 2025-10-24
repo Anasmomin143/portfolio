@@ -3,7 +3,6 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { ArrowLeft, Upload, FileJson, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
@@ -126,10 +125,7 @@ export default function ImportProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--color-background)' }}>
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           {/* Header */}
           <div className="mb-8">
             <Link
@@ -401,8 +397,6 @@ export default function ImportProjectsPage() {
               </button>
             </div>
           </div>
-        </main>
-      </div>
     </div>
   );
 }

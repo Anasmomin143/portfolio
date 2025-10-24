@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { AdminSidebar, PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, ArrayInput, FormCheckbox, FormDate, FormNumber } from '@/components/admin';
+import { PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, ArrayInput, FormCheckbox, FormDate, FormNumber } from '@/components/admin';
 import { toast } from 'sonner';
 
 export default function EditExperiencePage() {
@@ -83,22 +83,14 @@ export default function EditExperiencePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex bg-background">
-        <AdminSidebar user={{ email: '', name: 'Admin' }} />
-        <div className="flex-1 lg:ml-64 p-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-          </div>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           <PageHeader
             title="Edit Experience"
             backHref="/admin/experience"
@@ -198,8 +190,6 @@ export default function EditExperiencePage() {
               variant="list"
             />
           </FormLayout>
-        </main>
-      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AdminSidebar, PageHeader, FormLayout, FormGrid, FormInput, FormSelect, FormNumber } from '@/components/admin';
+import { PageHeader, FormLayout, FormGrid, FormInput, FormSelect, FormNumber } from '@/components/admin';
 
 const CATEGORIES = [
   { value: 'frontend', label: 'Frontend' },
@@ -63,10 +63,7 @@ export default function NewSkillPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           <PageHeader
             title="Add New Skill"
             backHref="/admin/skills"
@@ -125,8 +122,6 @@ export default function NewSkillPage() {
               />
             </FormGrid>
           </FormLayout>
-        </main>
-      </div>
     </div>
   );
 }

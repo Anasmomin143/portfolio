@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  AdminSidebar,
   PageHeader,
   FormLayout,
   FormGrid,
@@ -64,10 +63,7 @@ export default function NewProjectPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           <PageHeader
             title="Add New Project"
             backHref="/admin/projects"
@@ -183,8 +179,6 @@ export default function NewProjectPage() {
               variant="list"
             />
           </FormLayout>
-        </main>
-      </div>
     </div>
   );
 }

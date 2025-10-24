@@ -15,7 +15,6 @@ interface Activity {
     email: string;
   };
 }
-import { AdminSidebar } from '@/components/admin/admin-sidebar';
 
 async function getDashboardStats() {
   // Temporarily return mock data until Supabase is configured
@@ -112,11 +111,7 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--color-background)' }}>
-      <AdminSidebar user={session.user} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
-          <div className="space-y-8">
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2" style={COMMON_INLINE_STYLES.text}>
@@ -267,9 +262,6 @@ export default async function AdminDashboard() {
             <span className="font-medium">Add Experience</span>
           </Link>
         </div>
-      </div>
-          </div>
-        </main>
       </div>
     </div>
   );

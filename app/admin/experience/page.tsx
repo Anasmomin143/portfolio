@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, Calendar, MapPin } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
@@ -74,22 +73,14 @@ export default function ExperiencePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex" style={{ background: 'var(--color-background)' }}>
-        <AdminSidebar user={{ email: '', name: 'Admin' }} />
-        <div className="flex-1 lg:ml-64 p-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
-          </div>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--color-background)' }}>
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
@@ -223,8 +214,6 @@ export default function ExperiencePage() {
               ))}
             </div>
           )}
-        </main>
-      </div>
 
       <ConfirmationDialog />
     </div>

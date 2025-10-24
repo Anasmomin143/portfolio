@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AdminSidebar, PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
+import { PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
 
 export default function NewCertificationPage() {
   const router = useRouter();
@@ -51,10 +51,7 @@ export default function NewCertificationPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           <PageHeader
             title="Add New Certification"
             backHref="/admin/certifications"
@@ -133,8 +130,6 @@ export default function NewCertificationPage() {
               hint="Optional"
             />
           </FormLayout>
-        </main>
-      </div>
     </div>
   );
 }

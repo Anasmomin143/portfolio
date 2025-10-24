@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { AdminSidebar, PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
+import { PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
 
 export default function EditCertificationPage() {
   const router = useRouter();
@@ -83,22 +83,14 @@ export default function EditCertificationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex bg-background">
-        <AdminSidebar user={{ email: '', name: 'Admin' }} />
-        <div className="flex-1 lg:ml-64 p-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-          </div>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           <PageHeader
             title="Edit Certification"
             backHref="/admin/certifications"
@@ -177,8 +169,6 @@ export default function EditCertificationPage() {
               hint="Optional"
             />
           </FormLayout>
-        </main>
-      </div>
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AdminSidebar } from '@/components/admin';
 import {
   PageHeader,
   FormLayout,
@@ -62,10 +61,7 @@ export default function NewExperiencePage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <AdminSidebar user={{ email: '', name: 'Admin' }} />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 lg:p-8">
+    <div>
           <PageHeader
             title="Add New Experience"
             backHref="/admin/experience"
@@ -172,8 +168,6 @@ export default function NewExperiencePage() {
               variant="list"
             />
           </FormLayout>
-        </main>
-      </div>
     </div>
   );
 }
