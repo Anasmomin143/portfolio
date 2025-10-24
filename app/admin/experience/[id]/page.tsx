@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { AdminSidebar, PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, ArrayInput, FormCheckbox, FormDate, FormNumber } from '@/components/admin';
+import { toast } from 'sonner';
 
 export default function EditExperiencePage() {
   const router = useRouter();
@@ -11,7 +12,6 @@ export default function EditExperiencePage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     company: '',
@@ -45,7 +45,7 @@ export default function EditExperiencePage() {
           achievements: data.achievements || [],
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        toast.error(err instanceof Error ? err.message : 'Failed to load experience');
       } finally {
         setLoading(false);
       }
@@ -57,7 +57,6 @@ export default function EditExperiencePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setError('');
 
     try {
       const res = await fetch(`/api/admin/experience/${experienceId}`, {
@@ -74,9 +73,10 @@ export default function EditExperiencePage() {
         throw new Error(data.error || 'Failed to update experience');
       }
 
+      toast.success('Experience updated successfully!');
       router.push('/admin/experience');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      toast.error(err instanceof Error ? err.message : 'Failed to update experience');
       setSaving(false);
     }
   };
@@ -107,7 +107,6 @@ export default function EditExperiencePage() {
 
           <FormLayout
             onSubmit={handleSubmit}
-            error={error}
             isLoading={saving}
             submitLabel="Save Changes"
             cancelHref="/admin/experience"

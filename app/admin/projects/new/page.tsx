@@ -15,11 +15,11 @@ import {
   FormNumber,
   FormUrl,
 } from '@/components/admin';
+import { toast } from 'sonner';
 
 export default function NewProjectPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     id: '',
@@ -39,7 +39,6 @@ export default function NewProjectPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
     try {
       const res = await fetch('/api/admin/projects', {
@@ -56,9 +55,10 @@ export default function NewProjectPage() {
         throw new Error(data.error || 'Failed to create project');
       }
 
+      toast.success('Project created successfully!');
       router.push('/admin/projects');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      toast.error(err instanceof Error ? err.message : 'An error occurred');
       setLoading(false);
     }
   };
@@ -76,7 +76,6 @@ export default function NewProjectPage() {
 
           <FormLayout
             onSubmit={handleSubmit}
-            error={error}
             isLoading={loading}
             submitLabel="Create Project"
             cancelHref="/admin/projects"

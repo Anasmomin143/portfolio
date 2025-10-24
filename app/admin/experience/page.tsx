@@ -6,6 +6,7 @@ import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, Calendar, MapPin } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
+import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
 
 interface Experience {
   id: string;
@@ -27,6 +28,33 @@ export default function ExperiencePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const handleDeleteExperience = async (id: string) => {
+    const res = await fetch(`/api/admin/experience/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) throw new Error('Failed to delete experience');
+
+    setExperiences(experiences.filter((exp) => exp.id !== id));
+  };
+
+  const { openDialog, ConfirmationDialog } = useConfirmationDialog({
+    onConfirm: handleDeleteExperience,
+    config: {
+      title: 'Delete Experience?',
+      description: (item) => (
+        <>
+          This will permanently delete <strong>&quot;{item.position} at {item.company}&quot;</strong>.
+          This action cannot be undone.
+        </>
+      ),
+      actionLabel: 'Delete',
+      actionButtonClass: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+      successMessage: (item) => `${item.position} at ${item.company} deleted successfully`,
+      errorMessage: 'Failed to delete experience',
+    }
+  });
+
   useEffect(() => {
     fetchExperiences();
   }, []);
@@ -41,22 +69,6 @@ export default function ExperiencePage() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: string, company: string, position: string) => {
-    if (!confirm(`Are you sure you want to delete "${position} at ${company}"?`)) return;
-
-    try {
-      const res = await fetch(`/api/admin/experience/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) throw new Error('Failed to delete experience');
-
-      setExperiences(experiences.filter((exp) => exp.id !== id));
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete experience');
     }
   };
 
@@ -194,7 +206,12 @@ export default function ExperiencePage() {
                       Edit
                     </Link>
                     <button
-                      onClick={() => handleDelete(exp.id, exp.company, exp.position)}
+                      onClick={() => openDialog({
+                        id: exp.id,
+                        name: `${exp.position} at ${exp.company}`,
+                        position: exp.position,
+                        company: exp.company
+                      })}
                       className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
                       style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#ef4444' }}
                     >
@@ -208,6 +225,8 @@ export default function ExperiencePage() {
           )}
         </main>
       </div>
+
+      <ConfirmationDialog />
     </div>
   );
 }

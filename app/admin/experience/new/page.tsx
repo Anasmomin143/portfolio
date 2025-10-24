@@ -14,11 +14,11 @@ import {
   FormDate,
   FormNumber,
 } from '@/components/admin';
+import { toast } from 'sonner';
 
 export default function NewExperiencePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     company: '',
@@ -37,7 +37,6 @@ export default function NewExperiencePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
     try {
       const res = await fetch('/api/admin/experience', {
@@ -54,9 +53,10 @@ export default function NewExperiencePage() {
         throw new Error(data.error || 'Failed to create experience');
       }
 
+      toast.success('Experience created successfully!');
       router.push('/admin/experience');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      toast.error(err instanceof Error ? err.message : 'Failed to create experience');
       setLoading(false);
     }
   };
@@ -74,7 +74,6 @@ export default function NewExperiencePage() {
 
           <FormLayout
             onSubmit={handleSubmit}
-            error={error}
             isLoading={loading}
             submitLabel="Create Experience"
             cancelHref="/admin/experience"

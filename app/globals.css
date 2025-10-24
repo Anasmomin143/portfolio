@@ -4,6 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* React Day Picker styles */
+@import "react-day-picker/style.css";
+
 :root {
   /* Default Purple Dream theme */
   --color-primary: rgb(168, 85, 247);
@@ -70,6 +73,15 @@
               box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable animations for select dropdown, popover, dialog, alert-dialog, and toast */
+[role="listbox"],
+[data-radix-select-content],
+[data-radix-popover-content]
+ {
+  transition: none !important;
+  animation: none !important;
 }
 
 /* Smooth animations for interactive elements */

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { AdminSidebar, PageHeader, DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
 import { Award } from 'lucide-react';
+import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
 
 interface Skill {
   id: string;
@@ -18,6 +19,21 @@ export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const handleDeleteSkill = async (id: string) => {
+    const res = await fetch(`/api/admin/skills/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) throw new Error('Failed to delete skill');
+
+    setSkills(skills.filter((s) => s.id !== id));
+  };
+
+  const { openDialog, ConfirmationDialog } = useDeleteConfirmation({
+    onDelete: handleDeleteSkill,
+    entityName: 'skill',
+  });
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -35,22 +51,6 @@ export default function SkillsPage() {
 
     fetchSkills();
   }, []);
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this skill?')) return;
-
-    try {
-      const res = await fetch(`/api/admin/skills/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) throw new Error('Failed to delete skill');
-
-      setSkills(skills.filter((s) => s.id !== id));
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete skill');
-    }
-  };
 
   // Group skills by category
   const groupedSkills = skills.reduce((acc, skill) => {
@@ -117,7 +117,7 @@ export default function SkillsPage() {
                           key={skill.id}
                           actions={[
                             EditAction({ href: `/admin/skills/${skill.id}` }),
-                            DeleteAction({ onDelete: () => handleDelete(skill.id) }),
+                            DeleteAction({ onDelete: () => openDialog({ id: skill.id, name: skill.skill_name }) }),
                           ]}
                         >
                           <div className="space-y-2">
@@ -142,6 +142,8 @@ export default function SkillsPage() {
           )}
         </main>
       </div>
+
+      <ConfirmationDialog />
     </div>
   );
 }

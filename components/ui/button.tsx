@@ -3,14 +3,14 @@ import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'shadow-medium hover:shadow-strong transform hover:scale-105 text-white',
-        outline: 'shadow-soft hover:shadow-medium text-current border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        default: 'text-white',
+        outline: 'text-current border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        destructive: 'shadow-medium hover:shadow-strong transform hover:scale-105 text-white',
+        destructive: 'text-white',
       },
       size: {
         default: 'px-4 py-2 text-sm h-10',
@@ -68,20 +68,21 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const variants = {
-      default: 'shadow-medium hover:shadow-strong transform hover:scale-105 text-white',
-      outline: 'shadow-soft hover:shadow-medium text-current',
-      ghost: 'hover:bg-opacity-10 text-current',
-      destructive: 'shadow-medium hover:shadow-strong transform hover:scale-105 text-white'
+      default: 'text-white',
+      outline: 'text-current',
+      ghost: 'text-current',
+      destructive: 'text-white'
     };
 
     const sizes = {
       default: 'px-4 py-2 text-sm',
       sm: 'px-3 py-1.5 text-xs',
-      lg: 'px-6 py-3 text-base'
+      lg: 'px-6 py-3 text-base',
+      icon: ''
     };
 
     const buttonStyle = {
-      ...getVariantStyle(variant),
+      ...getVariantStyle(variant || 'default'),
       ...style
     };
 
@@ -89,11 +90,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return (
         <span
           className={cn(
-            'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+            'inline-flex items-center justify-center rounded-md font-medium transition-colors',
+            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary',
             'disabled:pointer-events-none disabled:opacity-50',
-            variants[variant],
-            sizes[size],
+            variants[variant || 'default'],
+            sizes[size || 'default'],
             className
           )}
           style={buttonStyle}
@@ -105,11 +106,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+          'inline-flex items-center justify-center rounded-md font-medium transition-colors',
+          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary',
           'disabled:pointer-events-none disabled:opacity-50',
-          variants[variant],
-          sizes[size],
+          variants[variant || 'default'],
+          sizes[size || 'default'],
           className
         )}
         style={buttonStyle}

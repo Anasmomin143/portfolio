@@ -59,7 +59,7 @@ export function ArrayInput({
           placeholder={placeholder}
           className="flex-1"
         />
-        <Button type="button" onClick={addItem} variant="outline" size="icon">
+        <Button type="button" onClick={addItem} variant="outline" size="icon" className="h-10 w-10 shrink-0">
           <Plus className="h-4 w-4" />
         </Button>
       </div>

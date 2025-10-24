@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
 
 type Props = {
   children: ReactNode;
@@ -13,7 +14,10 @@ export const metadata = {
 export default function RootLayout({ children }: Props) {
   return (
     <html suppressHydrationWarning>
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

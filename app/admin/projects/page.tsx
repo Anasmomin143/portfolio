@@ -6,6 +6,7 @@ import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, ExternalLink, Github as GithubIcon, Calendar, Upload } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
+import { useDeleteConfirmation, useConfirmationDialog } from '@/hooks/use-delete-confirmation';
 
 interface Project {
   id: string;
@@ -27,6 +28,21 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const handleDeleteProject = async (id: string) => {
+    const res = await fetch(`/api/admin/projects/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) throw new Error('Failed to delete project');
+
+    setProjects(projects.filter((p) => p.id !== id));
+  };
+
+  const { openDialog, ConfirmationDialog } = useDeleteConfirmation({
+    onDelete: handleDeleteProject,
+    entityName: 'project',
+  });
+
   console.log("projects",projects)
   useEffect(() => {
     fetchProjects();
@@ -42,22 +58,6 @@ export default function ProjectsPage() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
-
-    try {
-      const res = await fetch(`/api/admin/projects/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) throw new Error('Failed to delete project');
-
-      setProjects(projects.filter((p) => p.id !== id));
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete project');
     }
   };
 
@@ -195,7 +195,7 @@ export default function ProjectsPage() {
                       Edit
                     </Link>
                     <button
-                      onClick={() => handleDelete(project.id, project.name)}
+                      onClick={() => openDialog({ id: project.id, name: project.name })}
                       className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:scale-105"
                       style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#ef4444' }}
                     >
@@ -233,6 +233,8 @@ export default function ProjectsPage() {
           )}
         </main>
       </div>
+
+      <ConfirmationDialog />
     </div>
   );
 }

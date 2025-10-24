@@ -7,6 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Switch } from '@/components/ui/switch';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface BaseFieldProps {
   label: string;
@@ -243,85 +249,45 @@ export function FormNumber({
   hint,
   value,
   onChange,
-  min,
-  max,
+  min = 0,
+  max = 100,
   step = 1,
   placeholder,
   disabled,
-  showStepper = true,
 }: NumberFieldProps) {
-  const handleIncrement = () => {
-    const currentValue = value || 0;
-    const newValue = parseFloat((currentValue + step).toFixed(10)); // Fix floating point precision
-    if (max === undefined || newValue <= max) {
-      onChange(newValue);
+  // Generate options based on min, max, and step
+  const generateOptions = () => {
+    const options = [];
+    for (let i = min; i <= max; i += step) {
+      options.push({ value: i.toString(), label: i.toString() });
     }
+    return options;
   };
 
-  const handleDecrement = () => {
-    const currentValue = value || 0;
-    const newValue = parseFloat((currentValue - step).toFixed(10)); // Fix floating point precision
-    if (min === undefined || newValue >= min) {
-      onChange(newValue);
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-
-    // Allow empty input
-    if (inputValue === '') {
-      onChange(0);
-      return;
-    }
-
-    const numValue = parseFloat(inputValue);
-
-    // Only update if it's a valid number
-    if (!isNaN(numValue)) {
-      onChange(numValue);
-    }
-  };
+  const options = generateOptions();
 
   return (
     <div className="space-y-2">
       <Label>
         {label} {required && <span className="text-destructive">*</span>}
       </Label>
-      <div className="relative">
-        <Input
-          type="number"
-          value={value || ''}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          disabled={disabled}
-          required={required}
-          min={min}
-          max={max}
-          step={step}
-          className={error ? 'border-destructive' : showStepper ? 'pr-16' : ''}
-        />
-        {showStepper && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-0 border border-input rounded overflow-hidden bg-background shadow-sm">
-            <button
-              type="button"
-              onClick={handleIncrement}
-              disabled={disabled || (max !== undefined && (value || 0) >= max)}
-              className="px-2.5 py-1 text-xs hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-b border-input leading-none"
-            >
-              ▲
-            </button>
-            <button
-              type="button"
-              onClick={handleDecrement}
-              disabled={disabled || (min !== undefined && (value || 0) <= min)}
-              className="px-2.5 py-1 text-xs hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors leading-none"
-            >
-              ▼
-            </button>
-          </div>
-        )}
-      </div>
+      <Select
+        value={value.toString()}
+        onValueChange={(val) => onChange(parseFloat(val))}
+        required={required}
+        disabled={disabled}
+      >
+        <SelectTrigger className={error ? 'border-destructive' : ''}>
+          <SelectValue placeholder={placeholder || 'Select a number'} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {hint && <p className="text-sm text-muted-foreground">{hint}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
@@ -348,21 +314,61 @@ export function FormDate({
   max,
   disabled,
 }: DateFieldProps) {
+  const [open, setOpen] = React.useState(false);
+
+  // Convert string date to Date object
+  const dateValue = value ? new Date(value) : undefined;
+
+  // Convert min/max strings to Date objects if provided
+  const minDate = min ? new Date(min) : undefined;
+  const maxDate = max ? new Date(max) : undefined;
+
+  const handleSelect = (date: Date | undefined) => {
+    if (date) {
+      // Format date as YYYY-MM-DD
+      const formatted = format(date, 'yyyy-MM-dd');
+      onChange(formatted);
+    } else {
+      onChange('');
+    }
+    setOpen(false);
+  };
+
   return (
     <div className="space-y-2">
       <Label>
         {label} {required && <span className="text-destructive">*</span>}
       </Label>
-      <Input
-        type="date"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        required={required}
-        min={min}
-        max={max}
-        className={error ? 'border-destructive' : ''}
-      />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            disabled={disabled}
+            className={cn(
+              "w-full justify-start text-left font-normal h-10",
+              !value && "text-muted-foreground",
+              error && "border-destructive"
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {value ? format(new Date(value), 'PPP') : <span>Pick a date</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 bg-background" align="start">
+          <Calendar
+            mode="single"
+            selected={dateValue}
+            onSelect={handleSelect}
+            disabled={(date) => {
+              if (disabled) return true;
+              if (minDate && date < minDate) return true;
+              if (maxDate && date > maxDate) return true;
+              return false;
+            }}
+            className="rounded-md border"
+          />
+        </PopoverContent>
+      </Popover>
       {hint && <p className="text-sm text-muted-foreground">{hint}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>

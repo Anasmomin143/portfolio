@@ -15,6 +15,7 @@ import {
   FormNumber,
   FormUrl,
 } from '@/components/admin';
+import { toast } from 'sonner';
 
 interface ProjectFormData {
   id: string;
@@ -38,7 +39,6 @@ export default function EditProjectPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState<ProjectFormData>({
     id: '',
@@ -73,7 +73,7 @@ export default function EditProjectPage() {
           github_url: data.github_url || '',
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        toast.error(err instanceof Error ? err.message : 'Failed to load project');
       } finally {
         setLoading(false);
       }
@@ -85,7 +85,6 @@ export default function EditProjectPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setError('');
 
     try {
       const res = await fetch(`/api/admin/projects/${projectId}`, {
@@ -102,9 +101,10 @@ export default function EditProjectPage() {
         throw new Error(data.error || 'Failed to update project');
       }
 
+      toast.success('Project updated successfully!');
       router.push('/admin/projects');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      toast.error(err instanceof Error ? err.message : 'Failed to update project');
       setSaving(false);
     }
   };
@@ -135,7 +135,6 @@ export default function EditProjectPage() {
 
           <FormLayout
             onSubmit={handleSubmit}
-            error={error}
             isLoading={saving}
             submitLabel="Save Changes"
             cancelHref="/admin/projects"
