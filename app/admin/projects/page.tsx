@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
-import { Plus, Edit, Trash2, ExternalLink, Github as GithubIcon, Calendar, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, ExternalLink, Github as GithubIcon, Calendar, Upload, FolderGit2 } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
 import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
-import { PageHeader } from '@/components/admin';
+import { PageHeader, EmptyState } from '@/components/admin';
 
 interface Project {
   id: string;
@@ -104,19 +104,15 @@ export default function ProjectsPage() {
 
           {/* Projects Grid */}
           {projects.length === 0 ? (
-            <div className="text-center py-16 rounded-xl" style={{ background: THEME_GRADIENTS.card, border: '1px solid var(--card-border)' }}>
-              <p className="text-lg mb-4" style={COMMON_INLINE_STYLES.textMuted}>
-                No projects yet
-              </p>
-              <Link
-                href="/admin/projects/new"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]"
-                style={{ background: THEME_GRADIENTS.primary, color: 'white' }}
-              >
-                <Plus className="w-5 h-5" />
-                Add Your First Project
-              </Link>
-            </div>
+            <EmptyState
+              title="No projects yet"
+              description="Get started by adding your first project"
+              action={{
+                label: 'Add Project',
+                href: '/admin/projects/new',
+              }}
+              icon={<FolderGit2 className="h-16 w-16" />}
+            />
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {projects.map((project) => (

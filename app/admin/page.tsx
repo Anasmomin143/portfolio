@@ -222,43 +222,7 @@ export default async function AdminDashboard() {
         )}
       </div>
 
-      {/* Quick Actions */}
-      <div
-        className="rounded-xl p-6"
-        style={{
-          background: THEME_GRADIENTS.card,
-          border: '1px solid var(--card-border)',
-        }}
-      >
-        <h2 className="text-xl font-bold mb-4" style={COMMON_INLINE_STYLES.text}>
-          Quick Actions
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link
-            href="/admin/projects"
-            className="flex items-center gap-3 p-4 rounded-lg transition-all duration-300 hover:scale-[1.02]"
-            style={{
-              background: THEME_GRADIENTS.primary,
-              color: 'white',
-            }}
-          >
-            <FolderGit2 className="w-5 h-5" />
-            <span className="font-medium">Add New Project</span>
-          </Link>
-          <Link
-            href="/admin/experience"
-            className="flex items-center gap-3 p-4 rounded-lg transition-all duration-300 hover:scale-[1.02]"
-            style={{
-              background: THEME_GRADIENTS.secondary,
-              border: '1px solid var(--color-primary)',
-              ...COMMON_INLINE_STYLES.text,
-            }}
-          >
-            <Briefcase className="w-5 h-5" />
-            <span className="font-medium">Add Experience</span>
-          </Link>
-        </div>
-      </div>
+     
     </div>
   );
 }

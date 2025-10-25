@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { PageHeader, DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
 import { Award, Plus } from 'lucide-react';
+import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
 
 interface Certification {
   id: string;
@@ -39,21 +40,32 @@ export default function CertificationsPage() {
     fetchCertifications();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this certification?')) return;
+  const handleDeleteCertification = async (id: string) => {
+    const res = await fetch(`/api/admin/certifications/${id}`, {
+      method: 'DELETE',
+    });
 
-    try {
-      const res = await fetch(`/api/admin/certifications/${id}`, {
-        method: 'DELETE',
-      });
+    if (!res.ok) throw new Error('Failed to delete certification');
 
-      if (!res.ok) throw new Error('Failed to delete certification');
-
-      setCertifications(certifications.filter((c) => c.id !== id));
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete certification');
-    }
+    setCertifications(certifications.filter((c) => c.id !== id));
   };
+
+  const { openDialog, ConfirmationDialog } = useConfirmationDialog({
+    onConfirm: handleDeleteCertification,
+    config: {
+      title: 'Delete Certification?',
+      description: (item) => (
+        <>
+          This will permanently delete <strong>&quot;{item.name} - {item.issuer}&quot;</strong>.
+          This action cannot be undone.
+        </>
+      ),
+      actionLabel: 'Delete',
+      actionButtonClass: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+      successMessage: (item) => `${item.name} deleted successfully`,
+      errorMessage: 'Failed to delete certification',
+    }
+  });
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -120,7 +132,11 @@ export default function CertificationsPage() {
                     key={cert.id}
                     actions={[
                       EditAction({ href: `/admin/certifications/${cert.id}` }),
-                      DeleteAction({ onDelete: () => handleDelete(cert.id) }),
+                      DeleteAction({ onDelete: () => openDialog({
+                        id: cert.id,
+                        name: cert.name,
+                        issuer: cert.issuer
+                      }) }),
                     ]}
                   >
                     <div className="space-y-3">
@@ -171,6 +187,8 @@ export default function CertificationsPage() {
                 ))}
             </div>
           )}
+
+      <ConfirmationDialog />
     </div>
   );
 }

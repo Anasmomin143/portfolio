@@ -16,7 +16,7 @@ export default function RootLayout({ children }: Props) {
     <html suppressHydrationWarning>
       <body className="min-h-screen">
         {children}
-        <Toaster />
+        <Toaster position="top-center" richColors duration={3000} expand={false} />
       </body>
     </html>
   );

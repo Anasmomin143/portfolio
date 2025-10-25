@@ -743,3 +743,12 @@ header {
     @apply bg-background text-foreground;
   }
 }
+
+/* Sonner Toast z-index and visibility */
+[data-sonner-toaster] {
+  z-index: 9999 !important;
+}
+
+[data-sonner-toast] {
+  z-index: 9999 !important;
+}

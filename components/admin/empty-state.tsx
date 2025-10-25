@@ -1,7 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 
 interface EmptyStateProps {
   title: string;
@@ -9,31 +8,51 @@ interface EmptyStateProps {
   action?: {
     label: string;
     href: string;
+    icon?: React.ComponentType<{ className?: string }>;
   };
   icon?: React.ReactNode;
 }
 
 export function EmptyState({ title, description, action, icon }: EmptyStateProps) {
+  const ActionIcon = action?.icon || Plus;
+
   return (
-    <Card>
-      <CardContent className="flex flex-col items-center justify-center p-12 text-center">
-        {icon && <div className="mb-4 text-muted-foreground">{icon}</div>}
+    <div
+      className="text-center py-16 rounded-xl"
+      style={{
+        background: THEME_GRADIENTS.card,
+        border: '1px solid var(--card-border)',
+      }}
+    >
+      {icon && (
+        <div className="flex justify-center mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+          {icon}
+        </div>
+      )}
 
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <h3 className="text-xl font-bold mb-2" style={COMMON_INLINE_STYLES.text}>
+        {title}
+      </h3>
 
-        {description && (
-          <p className="text-muted-foreground mb-6 max-w-sm">{description}</p>
-        )}
+      {description && (
+        <p className="text-base mb-6" style={COMMON_INLINE_STYLES.textMuted}>
+          {description}
+        </p>
+      )}
 
-        {action && (
-          <Link href={action.href}>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              {action.label}
-            </Button>
-          </Link>
-        )}
-      </CardContent>
-    </Card>
+      {action && (
+        <Link
+          href={action.href}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]"
+          style={{
+            background: THEME_GRADIENTS.primary,
+            color: 'white',
+          }}
+        >
+          <ActionIcon className="w-5 h-5" />
+          {action.label}
+        </Link>
+      )}
+    </div>
   );
 }

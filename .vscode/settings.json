@@ -1,0 +1,35 @@
+{
+  // Exclude folders from file watcher (fixes source control loading)
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/out/**": true,
+    "**/.turbo/**": true
+  },
+
+  // Exclude from search
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/out": true
+  },
+
+  // Git settings for better performance
+  "git.enabled": true,
+  "git.autorefresh": true,
+  "git.autofetch": false,
+  "git.scanRepositories": [],
+  "git.detectSubmodules": false,
+
+  // Reduce file system load
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true
+  }
+}
