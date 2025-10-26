@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks';
 import { removeToast } from '@/lib/redux/slices/uiSlice';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
@@ -8,15 +8,28 @@ import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 export function ToastProvider() {
   const toasts = useAppSelector((state) => state.ui.toasts);
   const dispatch = useAppDispatch();
+  const timersRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
   useEffect(() => {
+    // Set timers for new toasts only
     toasts.forEach((toast) => {
-      const duration = toast.duration || 5000;
-      const timer = setTimeout(() => {
-        dispatch(removeToast(toast.id));
-      }, duration);
+      if (!timersRef.current.has(toast.id)) {
+        const duration = toast.duration || 5000;
+        const timer = setTimeout(() => {
+          dispatch(removeToast(toast.id));
+          timersRef.current.delete(toast.id);
+        }, duration);
+        timersRef.current.set(toast.id, timer);
+      }
+    });
 
-      return () => clearTimeout(timer);
+    // Clean up timers for removed toasts
+    const toastIds = new Set(toasts.map(t => t.id));
+    timersRef.current.forEach((timer, id) => {
+      if (!toastIds.has(id)) {
+        clearTimeout(timer);
+        timersRef.current.delete(id);
+      }
     });
   }, [toasts, dispatch]);
 

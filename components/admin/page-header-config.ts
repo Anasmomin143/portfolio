@@ -83,6 +83,12 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
       description: 'Manage your work experience',
       actions: [
         {
+          href: '/admin/experience/import',
+          label: 'Import JSON',
+          icon: Upload,
+          variant: 'secondary',
+        },
+        {
           href: '/admin/experience/new',
           label: 'Add Experience',
           icon: Plus,
@@ -100,7 +106,16 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     };
   }
 
-  if (pathname.startsWith('/admin/experience/') && pathname !== '/admin/experience/new') {
+  if (pathname === '/admin/experience/import') {
+    return {
+      title: 'Import Experience from JSON',
+      description: 'Upload a JSON file or paste JSON data to bulk import experience entries',
+      backHref: '/admin/experience',
+      backLabel: 'Back to Experience',
+    };
+  }
+
+  if (pathname.startsWith('/admin/experience/') && pathname !== '/admin/experience/new' && pathname !== '/admin/experience/import') {
     return {
       title: 'Edit Experience',
       backHref: '/admin/experience',
@@ -114,6 +129,12 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
       title: 'Skills',
       description: 'Manage your technical skills and proficiency levels',
       actions: [
+        {
+          href: '/admin/skills/import',
+          label: 'Import JSON',
+          icon: Upload,
+          variant: 'secondary',
+        },
         {
           href: '/admin/skills/new',
           label: 'Add Skill',
@@ -132,7 +153,16 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     };
   }
 
-  if (pathname.startsWith('/admin/skills/') && pathname !== '/admin/skills/new') {
+  if (pathname === '/admin/skills/import') {
+    return {
+      title: 'Import Skills from JSON',
+      description: 'Upload a JSON file or paste JSON data to bulk import skills',
+      backHref: '/admin/skills',
+      backLabel: 'Back to Skills',
+    };
+  }
+
+  if (pathname.startsWith('/admin/skills/') && pathname !== '/admin/skills/new' && pathname !== '/admin/skills/import') {
     return {
       title: 'Edit Skill',
       backHref: '/admin/skills',
@@ -146,6 +176,12 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
       title: 'Certifications',
       description: 'Manage your professional certifications and credentials',
       actions: [
+        {
+          href: '/admin/certifications/import',
+          label: 'Import JSON',
+          icon: Upload,
+          variant: 'secondary',
+        },
         {
           href: '/admin/certifications/new',
           label: 'Add Certification',
@@ -164,7 +200,16 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     };
   }
 
-  if (pathname.startsWith('/admin/certifications/') && pathname !== '/admin/certifications/new') {
+  if (pathname === '/admin/certifications/import') {
+    return {
+      title: 'Import Certifications from JSON',
+      description: 'Upload a JSON file or paste JSON data to bulk import certifications',
+      backHref: '/admin/certifications',
+      backLabel: 'Back to Certifications',
+    };
+  }
+
+  if (pathname.startsWith('/admin/certifications/') && pathname !== '/admin/certifications/new' && pathname !== '/admin/certifications/import') {
     return {
       title: 'Edit Certification',
       backHref: '/admin/certifications',

@@ -84,7 +84,7 @@ export default function SkillsPage() {
                 <div key={category}>
                   <h2 className="text-xl font-bold mb-4 capitalize">{category}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {categorySkills
+                    {[...categorySkills]
                       .sort((a, b) => a.display_order - b.display_order)
                       .map((skill) => (
                         <DataCard

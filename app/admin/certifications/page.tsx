@@ -98,8 +98,8 @@ export default function CertificationsPage() {
             />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {certifications
-                ?.sort((a, b) => a.display_order - b.display_order)
+              {[...(certifications || [])]
+                .sort((a, b) => a.display_order - b.display_order)
                 .map((cert) => (
                   <DataCard
                     key={cert.id}
