@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plus, LucideIcon } from 'lucide-react';
+import { ArrowLeft, LucideIcon } from 'lucide-react';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 
 interface ActionButton {
@@ -15,11 +14,6 @@ interface PageHeaderProps {
   description?: string;
   backHref?: string;
   backLabel?: string;
-  action?: {
-    href: string;
-    label: string;
-    icon?: React.ReactNode;
-  };
   actions?: ActionButton[];
 }
 
@@ -28,7 +22,6 @@ export function PageHeader({
   description,
   backHref,
   backLabel = 'Back',
-  action,
   actions,
 }: PageHeaderProps) {
   return (
@@ -56,7 +49,7 @@ export function PageHeader({
           )}
         </div>
 
-        {/* Multiple actions support */}
+        {/* Action buttons */}
         {actions && actions.length > 0 && (
           <div className="flex gap-3">
             {actions.map((btn, index) => {
@@ -80,16 +73,6 @@ export function PageHeader({
               );
             })}
           </div>
-        )}
-
-        {/* Legacy single action support (for backward compatibility) */}
-        {!actions && action && (
-          <Link href={action.href}>
-            <Button>
-              {action.icon || <Plus className="mr-2 h-4 w-4" />}
-              {action.label}
-            </Button>
-          </Link>
         )}
       </div>
     </div>

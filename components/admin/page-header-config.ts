@@ -81,10 +81,14 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     return {
       title: 'Experience',
       description: 'Manage your work experience',
-      action: {
-        href: '/admin/experience/new',
-        label: 'Add Experience',
-      },
+      actions: [
+        {
+          href: '/admin/experience/new',
+          label: 'Add Experience',
+          icon: Plus,
+          variant: 'primary',
+        },
+      ],
     };
   }
 
@@ -109,10 +113,14 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     return {
       title: 'Skills',
       description: 'Manage your technical skills and proficiency levels',
-      action: {
-        href: '/admin/skills/new',
-        label: 'Add Skill',
-      },
+      actions: [
+        {
+          href: '/admin/skills/new',
+          label: 'Add Skill',
+          icon: Plus,
+          variant: 'primary',
+        },
+      ],
     };
   }
 
@@ -137,10 +145,14 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     return {
       title: 'Certifications',
       description: 'Manage your professional certifications and credentials',
-      action: {
-        href: '/admin/certifications/new',
-        label: 'Add Certification',
-      },
+      actions: [
+        {
+          href: '/admin/certifications/new',
+          label: 'Add Certification',
+          icon: Plus,
+          variant: 'primary',
+        },
+      ],
     };
   }
 

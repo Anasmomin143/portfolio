@@ -7,14 +7,12 @@ import Link from 'next/link';
 
 interface Activity {
   id: string;
-  action: string;
-  entity_type: string;
+  action: 'CREATE' | 'UPDATE' | 'DELETE';
   table_name: string;
-  details: string;
   created_at: string;
   admin_users?: {
     email: string;
-  };
+  } | null;
 }
 
 interface DashboardStats {
@@ -153,7 +151,7 @@ export default function AdminDashboard() {
         </div>
 
         {stats.recentActivity.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-y-auto" style={{ maxHeight: '400px' }}>
             {stats.recentActivity.map((activity: Activity) => (
               <div
                 key={activity.id}

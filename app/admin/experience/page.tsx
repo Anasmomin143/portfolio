@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
-import { Plus, Edit, Trash2, Calendar, MapPin, Briefcase } from 'lucide-react';
+import { Edit, Trash2, Calendar, MapPin, Briefcase } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
 import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
 import { EmptyState } from '@/components/admin';

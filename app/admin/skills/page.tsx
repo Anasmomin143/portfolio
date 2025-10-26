@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
-import { Award, Plus } from 'lucide-react';
+import { Award } from 'lucide-react';
 import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
 
 interface Skill {
