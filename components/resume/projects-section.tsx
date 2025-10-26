@@ -8,7 +8,7 @@ import { COMMON_INLINE_STYLES, THEME_GRADIENTS, TAILWIND_PATTERNS } from '@/lib/
 import { Chip } from '@/components/ui/chip';
 import { StaggerItem } from '@/components/animations/stagger-container';
 import { HoverCard } from '@/components/animations/hover-card';
-import { Building, Calendar, ExternalLink, Github as GithubIcon } from 'lucide-react';
+import { Building, Calendar, ExternalLink, Github } from 'lucide-react';
 import Link from 'next/link';
 
 export function ProjectsSection() {
@@ -36,7 +36,7 @@ export function ProjectsSection() {
                     </div>
                   </div>
                   {project.current && (
-                    <Chip variant="primary" size="sm" className="animate-pulse">
+                    <Chip variant="primary" size="sm" animated={false}>
                       Active
                     </Chip>
                   )}
@@ -95,7 +95,7 @@ export function ProjectsSection() {
                           border: '1px solid var(--color-primary)'
                         }}
                       >
-                        <GithubIcon className="w-4 h-4" />
+                        <Github className="w-4 h-4" />
                         Code
                       </Link>
                     )}
