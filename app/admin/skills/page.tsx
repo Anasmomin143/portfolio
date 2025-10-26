@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
+import { useEffect } from 'react';
+import { DataCard, EditAction, DeleteAction, EmptyState, DataWrapper } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
 import { Award } from 'lucide-react';
 import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { fetchSkills, deleteSkill } from '@/lib/redux/slices/skillsSlice';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 interface Skill {
   id: string;
@@ -16,18 +19,27 @@ interface Skill {
 }
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
+  const { items: skills, loading, error } = useAppSelector((state) => state.skills);
+
+  useEffect(() => {
+    dispatch(fetchSkills());
+  }, [dispatch]);
 
   const handleDeleteSkill = async (id: string) => {
-    const res = await fetch(`/api/admin/skills/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!res.ok) throw new Error('Failed to delete skill');
-
-    setSkills(skills.filter((s) => s.id !== id));
+    try {
+      await dispatch(deleteSkill(id)).unwrap();
+      dispatch(addToast({
+        type: 'success',
+        message: 'Skill deleted successfully',
+      }));
+    } catch (error) {
+      dispatch(addToast({
+        type: 'error',
+        message: error as string,
+      }));
+      throw error; // Re-throw for confirmation dialog
+    }
   };
 
   const { openDialog, ConfirmationDialog } = useDeleteConfirmation({
@@ -35,25 +47,12 @@ export default function SkillsPage() {
     entityName: 'skill',
   });
 
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const res = await fetch('/api/admin/skills');
-        if (!res.ok) throw new Error('Failed to fetch skills');
-        const data = await res.json();
-        setSkills(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSkills();
-  }, []);
+  const refetch = () => {
+    dispatch(fetchSkills());
+  };
 
   // Group skills by category
-  const groupedSkills = skills.reduce((acc, skill) => {
+  const groupedSkills = (skills || []).reduce((acc, skill) => {
     if (!acc[skill.category]) {
       acc[skill.category] = [];
     }
@@ -61,28 +60,15 @@ export default function SkillsPage() {
     return acc;
   }, {} as Record<string, Skill[]>);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-          <p className="text-sm text-muted-foreground">
-            Loading skills...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div>
-          {error && (
-            <div className="mb-6 p-4 rounded-lg bg-destructive/10 text-destructive">
-              {error}
-            </div>
-          )}
-
-          {skills.length === 0 ? (
+    <DataWrapper
+      loading={loading}
+      error={error}
+      onRetry={refetch}
+      loadingMessage="Loading skills..."
+    >
+      <div>
+          {(skills?.length || 0) === 0 ? (
             <EmptyState
               title="No skills yet"
               description="Get started by adding your first skill"
@@ -129,7 +115,8 @@ export default function SkillsPage() {
             </div>
           )}
 
-      <ConfirmationDialog />
-    </div>
+        <ConfirmationDialog />
+      </div>
+    </DataWrapper>
   );
 }

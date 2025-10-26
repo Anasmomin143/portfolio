@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
+import { useEffect } from 'react';
+import { DataCard, EditAction, DeleteAction, EmptyState, DataWrapper } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
 import { Award } from 'lucide-react';
 import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { fetchCertifications, deleteCertification } from '@/lib/redux/slices/certificationsSlice';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 interface Certification {
   id: string;
@@ -19,35 +22,27 @@ interface Certification {
 }
 
 export default function CertificationsPage() {
-  const [certifications, setCertifications] = useState<Certification[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
+  const { items: certifications, loading, error } = useAppSelector((state) => state.certifications);
 
   useEffect(() => {
-    const fetchCertifications = async () => {
-      try {
-        const res = await fetch('/api/admin/certifications');
-        if (!res.ok) throw new Error('Failed to fetch certifications');
-        const data = await res.json();
-        setCertifications(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCertifications();
-  }, []);
+    dispatch(fetchCertifications());
+  }, [dispatch]);
 
   const handleDeleteCertification = async (id: string) => {
-    const res = await fetch(`/api/admin/certifications/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!res.ok) throw new Error('Failed to delete certification');
-
-    setCertifications(certifications.filter((c) => c.id !== id));
+    try {
+      await dispatch(deleteCertification(id)).unwrap();
+      dispatch(addToast({
+        type: 'success',
+        message: 'Certification deleted successfully',
+      }));
+    } catch (error) {
+      dispatch(addToast({
+        type: 'error',
+        message: error as string,
+      }));
+      throw error; // Re-throw for confirmation dialog
+    }
   };
 
   const { openDialog, ConfirmationDialog } = useConfirmationDialog({
@@ -67,6 +62,10 @@ export default function CertificationsPage() {
     }
   });
 
+  const refetch = () => {
+    dispatch(fetchCertifications());
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -79,28 +78,15 @@ export default function CertificationsPage() {
     return new Date(expiryDate) < new Date();
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-          <p className="text-sm text-muted-foreground">
-            Loading certifications...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div>
-          {error && (
-            <div className="mb-6 p-4 rounded-lg bg-destructive/10 text-destructive">
-              {error}
-            </div>
-          )}
-
-          {certifications.length === 0 ? (
+    <DataWrapper
+      loading={loading}
+      error={error}
+      onRetry={refetch}
+      loadingMessage="Loading certifications..."
+    >
+      <div>
+          {(certifications?.length || 0) === 0 ? (
             <EmptyState
               title="No certifications yet"
               description="Get started by adding your first certification"
@@ -113,7 +99,7 @@ export default function CertificationsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {certifications
-                .sort((a, b) => a.display_order - b.display_order)
+                ?.sort((a, b) => a.display_order - b.display_order)
                 .map((cert) => (
                   <DataCard
                     key={cert.id}
@@ -175,7 +161,8 @@ export default function CertificationsPage() {
             </div>
           )}
 
-      <ConfirmationDialog />
-    </div>
+        <ConfirmationDialog />
+      </div>
+    </DataWrapper>
   );
 }

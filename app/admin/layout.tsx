@@ -1,7 +1,9 @@
 import { AuthSessionProvider } from '@/components/providers/session-provider';
 import { AdminLayoutWrapper } from '@/components/admin/admin-layout-wrapper';
+import { ReduxProvider } from '@/lib/redux/provider';
+import { ToastProvider } from '@/components/providers/toast-provider';
+import { GlobalLoader } from '@/components/providers/global-loader';
 import { auth } from '@/lib/auth/auth';
-import { redirect } from 'next/navigation';
 
 export default async function AdminLayout({
   children,
@@ -10,13 +12,15 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
 
-  // Allow access to login page without authentication
-  // All other admin pages require authentication
-  const isLoginPage = false; // Will be checked in client component
-
   return (
-    <AuthSessionProvider>
-      <AdminLayoutWrapper session={session}>{children}</AdminLayoutWrapper>
-    </AuthSessionProvider>
+    <ReduxProvider>
+      <AuthSessionProvider>
+        <AdminLayoutWrapper session={session}>
+          {children}
+        </AdminLayoutWrapper>
+        <ToastProvider />
+        <GlobalLoader />
+      </AuthSessionProvider>
+    </ReduxProvider>
   );
 }

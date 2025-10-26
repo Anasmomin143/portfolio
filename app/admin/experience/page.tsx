@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Edit, Trash2, Calendar, MapPin, Briefcase } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
 import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
-import { EmptyState } from '@/components/admin';
+import { EmptyState, DataWrapper } from '@/components/admin';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { fetchExperience, deleteExperience } from '@/lib/redux/slices/experienceSlice';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 interface Experience {
   id: string;
@@ -24,18 +27,27 @@ interface Experience {
 }
 
 export default function ExperiencePage() {
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
+  const { items: experiences, loading, error } = useAppSelector((state) => state.experience);
+
+  useEffect(() => {
+    dispatch(fetchExperience());
+  }, [dispatch]);
 
   const handleDeleteExperience = async (id: string) => {
-    const res = await fetch(`/api/admin/experience/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!res.ok) throw new Error('Failed to delete experience');
-
-    setExperiences(experiences.filter((exp) => exp.id !== id));
+    try {
+      await dispatch(deleteExperience(id)).unwrap();
+      dispatch(addToast({
+        type: 'success',
+        message: 'Experience deleted successfully',
+      }));
+    } catch (error) {
+      dispatch(addToast({
+        type: 'error',
+        message: error as string,
+      }));
+      throw error; // Re-throw for confirmation dialog
+    }
   };
 
   const { openDialog, ConfirmationDialog } = useConfirmationDialog({
@@ -55,47 +67,20 @@ export default function ExperiencePage() {
     }
   });
 
-  useEffect(() => {
-    fetchExperiences();
-  }, []);
-
-  const fetchExperiences = async () => {
-    try {
-      const res = await fetch('/api/admin/experience');
-      if (!res.ok) throw new Error('Failed to fetch experiences');
-      const data = await res.json();
-      setExperiences(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
+  const refetch = () => {
+    dispatch(fetchExperience());
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
-          <p className="text-sm" style={COMMON_INLINE_STYLES.textMuted}>
-            Loading experience...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div>
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 rounded-lg" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
-              <p style={{ color: '#ef4444' }}>{error}</p>
-            </div>
-          )}
-
+    <DataWrapper
+      loading={loading}
+      error={error}
+      onRetry={refetch}
+      loadingMessage="Loading experience..."
+    >
+      <div>
           {/* Experience List */}
-          {experiences.length === 0 ? (
+          {experiences?.length === 0 ? (
             <EmptyState
               title="No experience yet"
               description="Get started by adding your first work experience"
@@ -107,7 +92,7 @@ export default function ExperiencePage() {
             />
           ) : (
             <div className="space-y-6">
-              {experiences.map((exp) => (
+              {experiences?.map((exp) => (
                 <div
                   key={exp.id}
                   className="rounded-xl p-6 card-hover"
@@ -197,7 +182,8 @@ export default function ExperiencePage() {
             </div>
           )}
 
-      <ConfirmationDialog />
-    </div>
+        <ConfirmationDialog />
+      </div>
+    </DataWrapper>
   );
 }
