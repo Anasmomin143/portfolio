@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     };
 
     // Required fields for validation
-    const requiredFields = ['id', 'name', 'category', 'proficiency'];
+    const requiredFields = ['id', 'skill_name', 'category', 'proficiency_level'];
 
     // Check for existing skill IDs to avoid duplicates
     const skillIds = body.skills.map((s: { id?: string }) => s.id).filter(Boolean);
@@ -54,11 +54,10 @@ export async function POST(request: Request) {
     const normalizeSkill = (skill: Record<string, unknown>) => {
       return {
         id: skill.id,
-        name: skill.name,
+        skill_name: skill.skill_name || skill.skillName || skill.name,
         category: skill.category,
-        proficiency: skill.proficiency,
-        years_of_experience: skill.years_of_experience || skill.yearsOfExperience,
-        description: skill.description,
+        proficiency_level: skill.proficiency_level || skill.proficiencyLevel || skill.proficiency,
+        years_experience: skill.years_experience || skill.yearsExperience || skill.years_of_experience || skill.yearsOfExperience,
         display_order: skill.display_order || skill.displayOrder || 0,
       };
     };
@@ -81,12 +80,13 @@ export async function POST(request: Request) {
           continue;
         }
 
-        // Validate proficiency range
-        if (typeof skill.proficiency !== 'number' || skill.proficiency < 0 || skill.proficiency > 100) {
+        // Validate proficiency_level (must be integer 1-5)
+        const profLevel = Number(skill.proficiency_level);
+        if (!Number.isInteger(profLevel) || profLevel < 1 || profLevel > 5) {
           result.failed++;
           result.errors.push({
             index: i,
-            error: 'Proficiency must be a number between 0 and 100',
+            error: 'Proficiency level must be an integer between 1 and 5 (1=Beginner, 2=Novice, 3=Intermediate, 4=Advanced, 5=Expert)',
             data: rawSkill,
           });
           continue;
@@ -111,11 +111,10 @@ export async function POST(request: Request) {
           .from('skills')
           .insert({
             id: skill.id,
-            name: skill.name,
+            skill_name: skill.skill_name,
             category: skill.category,
-            proficiency: skill.proficiency,
-            years_of_experience: skill.years_of_experience || null,
-            description: skill.description || null,
+            proficiency_level: parseInt(String(skill.proficiency_level)),
+            years_experience: skill.years_experience || null,
             display_order: skill.display_order || 0,
           })
           .select()

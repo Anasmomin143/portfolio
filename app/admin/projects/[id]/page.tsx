@@ -13,7 +13,8 @@ import {
   FormNumber,
   FormUrl,
 } from '@/components/admin';
-import { toast } from 'sonner';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 interface ProjectFormData {
   id: string;
@@ -33,6 +34,7 @@ interface ProjectFormData {
 export default function EditProjectPage() {
   const router = useRouter();
   const params = useParams();
+  const dispatch = useAppDispatch();
   const projectId = params.id as string;
 
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ export default function EditProjectPage() {
           github_url: data.github_url || '',
         });
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Failed to load project');
+        dispatch(addToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to load project' }));
       } finally {
         setLoading(false);
       }
@@ -99,10 +101,10 @@ export default function EditProjectPage() {
         throw new Error(data.error || 'Failed to update project');
       }
 
-      toast.success('Project updated successfully!');
+      dispatch(addToast({ type: 'success', message: 'Project updated successfully!' }));
       router.push('/admin/projects');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update project');
+      dispatch(addToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to update project' }));
       setSaving(false);
     }
   };

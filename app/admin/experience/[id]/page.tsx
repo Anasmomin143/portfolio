@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { FormLayout, FormGrid, FormInput, FormTextarea, ArrayInput, FormCheckbox, FormDate, FormNumber } from '@/components/admin';
-import { toast } from 'sonner';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 export default function EditExperiencePage() {
   const router = useRouter();
   const params = useParams();
+  const dispatch = useAppDispatch();
   const experienceId = params.id as string;
 
   const [loading, setLoading] = useState(true);
@@ -45,7 +47,7 @@ export default function EditExperiencePage() {
           achievements: data.achievements || [],
         });
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Failed to load experience');
+        dispatch(addToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to load experience' }));
       } finally {
         setLoading(false);
       }
@@ -73,10 +75,10 @@ export default function EditExperiencePage() {
         throw new Error(data.error || 'Failed to update experience');
       }
 
-      toast.success('Experience updated successfully!');
+      dispatch(addToast({ type: 'success', message: 'Experience updated successfully!' }));
       router.push('/admin/experience');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update experience');
+      dispatch(addToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to update experience' }));
       setSaving(false);
     }
   };

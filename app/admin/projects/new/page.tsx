@@ -13,10 +13,12 @@ import {
   FormNumber,
   FormUrl,
 } from '@/components/admin';
-import { toast } from 'sonner';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 export default function NewProjectPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -53,10 +55,10 @@ export default function NewProjectPage() {
         throw new Error(data.error || 'Failed to create project');
       }
 
-      toast.success('Project created successfully!');
+      dispatch(addToast({ type: 'success', message: 'Project created successfully!' }));
       router.push('/admin/projects');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'An error occurred');
+      dispatch(addToast({ type: 'error', message: err instanceof Error ? err.message : 'An error occurred' }));
       setLoading(false);
     }
   };

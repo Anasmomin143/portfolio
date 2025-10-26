@@ -12,10 +12,12 @@ import {
   FormDate,
   FormNumber,
 } from '@/components/admin';
-import { toast } from 'sonner';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { addToast } from '@/lib/redux/slices/uiSlice';
 
 export default function NewExperiencePage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -51,10 +53,10 @@ export default function NewExperiencePage() {
         throw new Error(data.error || 'Failed to create experience');
       }
 
-      toast.success('Experience created successfully!');
+      dispatch(addToast({ type: 'success', message: 'Experience created successfully!' }));
       router.push('/admin/experience');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to create experience');
+      dispatch(addToast({ type: 'error', message: err instanceof Error ? err.message : 'Failed to create experience' }));
       setLoading(false);
     }
   };

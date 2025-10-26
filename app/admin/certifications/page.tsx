@@ -9,18 +9,6 @@ import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { fetchCertifications, deleteCertification } from '@/lib/redux/slices/certificationsSlice';
 import { addToast } from '@/lib/redux/slices/uiSlice';
 
-interface Certification {
-  id: string;
-  name: string;
-  issuer: string;
-  issue_date: string;
-  expiry_date: string | null;
-  credential_id: string | null;
-  credential_url: string | null;
-  description: string | null;
-  display_order: number;
-}
-
 export default function CertificationsPage() {
   const dispatch = useAppDispatch();
   const { items: certifications, loading, error } = useAppSelector((state) => state.certifications);

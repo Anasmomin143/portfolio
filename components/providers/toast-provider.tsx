@@ -35,40 +35,48 @@ export function ToastProvider() {
 
   if (toasts.length === 0) return null;
 
+  // Show only the most recent toast
+  const currentToast = toasts[toasts.length - 1];
+
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-md">
-      {toasts.map((toast) => (
-        <div
-          key={toast.id}
-          className="rounded-lg p-4 shadow-lg animate-in slide-in-from-right flex items-start gap-3"
-          style={{
-            background:
-              toast.type === 'success'
-                ? 'rgba(34, 197, 94, 0.9)'
-                : toast.type === 'error'
-                ? 'rgba(239, 68, 68, 0.9)'
-                : toast.type === 'warning'
-                ? 'rgba(251, 191, 36, 0.9)'
-                : 'rgba(59, 130, 246, 0.9)',
-            color: 'white',
-            backdropFilter: 'blur(8px)',
-          }}
-        >
-          {toast.type === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0" />}
-          {toast.type === 'error' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
-          {toast.type === 'warning' && <AlertTriangle className="w-5 h-5 flex-shrink-0" />}
-          {toast.type === 'info' && <Info className="w-5 h-5 flex-shrink-0" />}
-
-          <p className="flex-1 text-sm font-medium">{toast.message}</p>
-
-          <button
-            onClick={() => dispatch(removeToast(toast.id))}
-            className="flex-shrink-0 hover:opacity-70 transition-opacity"
-          >
-            <X className="w-4 h-4" />
-          </button>
+    <div className="fixed top-4 right-4 z-[9999] max-w-md">
+      <div
+        key={currentToast.id}
+        className="rounded-lg p-4 shadow-2xl flex items-start gap-3 animate-in slide-in-from-right-5 fade-in duration-300"
+        style={{
+          background:
+            currentToast.type === 'success'
+              ? 'rgba(34, 197, 94, 0.95)'
+              : currentToast.type === 'error'
+              ? 'rgba(239, 68, 68, 0.95)'
+              : currentToast.type === 'warning'
+              ? 'rgba(251, 191, 36, 0.95)'
+              : 'rgba(59, 130, 246, 0.95)',
+          color: 'white',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+          minWidth: '320px',
+        }}
+      >
+        <div className="flex-shrink-0 mt-0.5">
+          {currentToast.type === 'success' && <CheckCircle className="w-5 h-5" />}
+          {currentToast.type === 'error' && <AlertCircle className="w-5 h-5" />}
+          {currentToast.type === 'warning' && <AlertTriangle className="w-5 h-5" />}
+          {currentToast.type === 'info' && <Info className="w-5 h-5" />}
         </div>
-      ))}
+
+        <p className="flex-1 text-sm font-medium leading-relaxed">{currentToast.message}</p>
+
+        <button
+          onClick={() => dispatch(removeToast(currentToast.id))}
+          className="flex-shrink-0 hover:opacity-70 transition-opacity rounded p-1 hover:bg-white/10"
+          aria-label="Close notification"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }
