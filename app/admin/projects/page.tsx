@@ -6,7 +6,7 @@ import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, ExternalLink, Github as GithubIcon, Calendar, Upload, FolderGit2 } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
 import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
-import { PageHeader, EmptyState } from '@/components/admin';
+import { EmptyState } from '@/components/admin';
 
 interface Project {
   id: string;
@@ -76,25 +76,6 @@ export default function ProjectsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Projects"
-        description="Manage your portfolio projects"
-        actions={[
-          {
-            href: '/admin/projects/import',
-            label: 'Import JSON',
-            icon: Upload,
-            variant: 'secondary',
-          },
-          {
-            href: '/admin/projects/new',
-            label: 'Add Project',
-            icon: Plus,
-            variant: 'primary',
-          },
-        ]}
-      />
-
           {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 rounded-lg" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>

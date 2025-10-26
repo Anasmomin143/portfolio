@@ -6,7 +6,7 @@ import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Plus, Edit, Trash2, Calendar, MapPin, Briefcase } from 'lucide-react';
 import { Chip } from '@/components/ui/chip';
 import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
-import { PageHeader, EmptyState } from '@/components/admin';
+import { EmptyState } from '@/components/admin';
 
 interface Experience {
   id: string;
@@ -87,19 +87,6 @@ export default function ExperiencePage() {
 
   return (
     <div>
-      <PageHeader
-        title="Experience"
-        description="Manage your work experience"
-        actions={[
-          {
-            href: '/admin/experience/new',
-            label: 'Add Experience',
-            icon: Plus,
-            variant: 'primary',
-          },
-        ]}
-      />
-
           {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 rounded-lg" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>

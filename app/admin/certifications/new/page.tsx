@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
+import { FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
 
 export default function NewCertificationPage() {
   const router = useRouter();
@@ -51,14 +51,7 @@ export default function NewCertificationPage() {
   };
 
   return (
-    <div>
-          <PageHeader
-            title="Add New Certification"
-            backHref="/admin/certifications"
-            backLabel="Back to Certifications"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             error={error}
             isLoading={loading}
@@ -130,6 +123,5 @@ export default function NewCertificationPage() {
               hint="Optional"
             />
           </FormLayout>
-    </div>
   );
 }

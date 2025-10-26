@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  PageHeader,
   FormLayout,
   FormGrid,
   FormInput,
@@ -63,14 +62,7 @@ export default function NewProjectPage() {
   };
 
   return (
-    <div>
-          <PageHeader
-            title="Add New Project"
-            backHref="/admin/projects"
-            backLabel="Back to Projects"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             isLoading={loading}
             submitLabel="Create Project"
@@ -179,6 +171,5 @@ export default function NewProjectPage() {
               variant="list"
             />
           </FormLayout>
-    </div>
   );
 }

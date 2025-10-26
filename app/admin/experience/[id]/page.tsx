@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, ArrayInput, FormCheckbox, FormDate, FormNumber } from '@/components/admin';
+import { FormLayout, FormGrid, FormInput, FormTextarea, ArrayInput, FormCheckbox, FormDate, FormNumber } from '@/components/admin';
 import { toast } from 'sonner';
 
 export default function EditExperiencePage() {
@@ -95,14 +95,7 @@ export default function EditExperiencePage() {
   }
 
   return (
-    <div>
-          <PageHeader
-            title="Edit Experience"
-            backHref="/admin/experience"
-            backLabel="Back to Experience"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             isLoading={saving}
             submitLabel="Save Changes"
@@ -195,6 +188,5 @@ export default function EditExperiencePage() {
               variant="list"
             />
           </FormLayout>
-    </div>
   );
 }

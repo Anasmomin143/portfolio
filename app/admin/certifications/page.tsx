@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PageHeader, DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
+import { DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
 import { Award, Plus } from 'lucide-react';
 import { useConfirmationDialog } from '@/hooks/use-delete-confirmation';
@@ -94,19 +94,6 @@ export default function CertificationsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Certifications"
-        description="Manage your professional certifications and credentials"
-        actions={[
-          {
-            href: '/admin/certifications/new',
-            label: 'Add Certification',
-            icon: Plus,
-            variant: 'primary',
-          },
-        ]}
-      />
-
           {error && (
             <div className="mb-6 p-4 rounded-lg bg-destructive/10 text-destructive">
               {error}

@@ -1,9 +1,9 @@
-import { auth } from '@/lib/auth/auth';
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { FolderGit2, Briefcase, Layers, Award, TrendingUp, Clock } from 'lucide-react';
 import Link from 'next/link';
-import { PageHeader } from '@/components/admin';
 
 interface Activity {
   id: string;
@@ -17,68 +17,41 @@ interface Activity {
   };
 }
 
-async function getDashboardStats() {
-  // Temporarily return mock data until Supabase is configured
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY === 'your_supabase_service_role_key_REPLACE_THIS') {
-    return {
-      projectsCount: 0,
-      experienceCount: 0,
-      skillsCount: 0,
-      certificationsCount: 0,
-      recentActivity: [],
-    };
-  }
-
-  const { getServiceSupabase } = await import('@/lib/supabase/client');
-  const supabase = getServiceSupabase();
-
-  try {
-    const [
-      { count: projectsCount },
-      { count: experienceCount },
-      { count: skillsCount },
-      { count: certificationsCount },
-    ] = await Promise.all([
-      supabase.from('projects').select('*', { count: 'exact', head: true }),
-      supabase.from('experience').select('*', { count: 'exact', head: true }),
-      supabase.from('skills').select('*', { count: 'exact', head: true }),
-      supabase.from('certifications').select('*', { count: 'exact', head: true }),
-    ]);
-
-    // Get recent activity from audit log
-    const { data: recentActivity } = await supabase
-      .from('audit_log')
-      .select('*, admin_users(email)')
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    return {
-      projectsCount: projectsCount || 0,
-      experienceCount: experienceCount || 0,
-      skillsCount: skillsCount || 0,
-      certificationsCount: certificationsCount || 0,
-      recentActivity: recentActivity || [],
-    };
-  } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
-    return {
-      projectsCount: 0,
-      experienceCount: 0,
-      skillsCount: 0,
-      certificationsCount: 0,
-      recentActivity: [],
-    };
-  }
+interface DashboardStats {
+  projectsCount: number;
+  experienceCount: number;
+  skillsCount: number;
+  certificationsCount: number;
+  recentActivity: Activity[];
 }
 
-export default async function AdminDashboard() {
-  const session = await auth();
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<DashboardStats>({
+    projectsCount: 0,
+    experienceCount: 0,
+    skillsCount: 0,
+    certificationsCount: 0,
+    recentActivity: [],
+  });
+  const [loading, setLoading] = useState(true);
 
-  if (!session?.user) {
-    redirect('/admin/login');
-  }
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/admin/dashboard-stats');
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const stats = await getDashboardStats();
+    fetchStats();
+  }, []);
 
   const statCards = [
     {
@@ -111,13 +84,21 @@ export default async function AdminDashboard() {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: 'var(--color-primary)' }} />
+          <p className="text-sm" style={COMMON_INLINE_STYLES.textMuted}>
+            Loading dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
-      <PageHeader
-        title={`Welcome back, ${session?.user?.name || 'Admin'}!`}
-        description="Here's an overview of your portfolio data"
-      />
-
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => {
@@ -222,7 +203,7 @@ export default async function AdminDashboard() {
         )}
       </div>
 
-     
+
     </div>
   );
 }

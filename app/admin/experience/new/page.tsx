@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  PageHeader,
   FormLayout,
   FormGrid,
   FormInput,
@@ -61,14 +60,7 @@ export default function NewExperiencePage() {
   };
 
   return (
-    <div>
-          <PageHeader
-            title="Add New Experience"
-            backHref="/admin/experience"
-            backLabel="Back to Experience"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             isLoading={loading}
             submitLabel="Create Experience"
@@ -168,6 +160,5 @@ export default function NewExperiencePage() {
               variant="list"
             />
           </FormLayout>
-    </div>
   );
 }

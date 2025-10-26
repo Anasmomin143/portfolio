@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PageHeader, FormLayout, FormGrid, FormInput, FormSelect, FormNumber } from '@/components/admin';
+import { FormLayout, FormGrid, FormInput, FormSelect, FormNumber } from '@/components/admin';
 
 const CATEGORIES = [
   { value: 'frontend', label: 'Frontend' },
@@ -63,14 +63,7 @@ export default function NewSkillPage() {
   };
 
   return (
-    <div>
-          <PageHeader
-            title="Add New Skill"
-            backHref="/admin/skills"
-            backLabel="Back to Skills"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             error={error}
             isLoading={loading}
@@ -122,6 +115,5 @@ export default function NewSkillPage() {
               />
             </FormGrid>
           </FormLayout>
-    </div>
   );
 }

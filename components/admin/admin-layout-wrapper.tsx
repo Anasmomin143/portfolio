@@ -3,6 +3,8 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { AdminSidebar } from './admin-sidebar';
+import { PageHeader } from './page-header';
+import { getPageHeaderConfig } from './page-header-config';
 import { ReactNode, useEffect } from 'react';
 
 interface AdminLayoutWrapperProps {
@@ -17,7 +19,6 @@ export function AdminLayoutWrapper({ children, session: serverSession }: AdminLa
   const isLoginPage = pathname === '/admin/login';
 
   // Use client session status to determine authentication
-  const isAuthenticated = status === 'authenticated';
   const isLoading = status === 'loading';
 
   // Redirect to login if not authenticated and not on login page
@@ -54,14 +55,17 @@ export function AdminLayoutWrapper({ children, session: serverSession }: AdminLa
 
   // Authenticated - show admin layout
   const session = clientSession || serverSession;
+  const userName = session?.user?.name || 'Admin';
+  const headerConfig = getPageHeaderConfig(pathname, userName);
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <AdminSidebar user={{ email: session?.user?.email || '', name: session?.user?.name || 'Admin' }} />
+      <AdminSidebar user={{ email: session?.user?.email || '', name: userName }} />
 
       {/* Main Content */}
       <main className="flex-1 p-6 pt-20 lg:pt-6 lg:ml-64 bg-gray-50">
+        {headerConfig && <PageHeader {...headerConfig} />}
         {children}
       </main>
     </div>

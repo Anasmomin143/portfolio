@@ -17,6 +17,8 @@ export { FormLayout, FormGrid } from './form-layout';
 export { PageHeader } from './page-header';
 export { DataCard, EditAction, DeleteAction } from './data-card';
 export { EmptyState } from './empty-state';
+export { getPageHeaderConfig } from './page-header-config';
+export type { PageHeaderConfig } from './page-header-config';
 
 // Admin Components
 export { AdminSidebar } from './admin-sidebar';

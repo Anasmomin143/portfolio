@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PageHeader, DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
+import { DataCard, EditAction, DeleteAction, EmptyState } from '@/components/admin';
 import { Badge } from '@/components/ui/badge';
 import { Award, Plus } from 'lucide-react';
 import { useDeleteConfirmation } from '@/hooks/use-delete-confirmation';
@@ -76,19 +76,6 @@ export default function SkillsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Skills"
-        description="Manage your technical skills and proficiency levels"
-        actions={[
-          {
-            href: '/admin/skills/new',
-            label: 'Add Skill',
-            icon: Plus,
-            variant: 'primary',
-          },
-        ]}
-      />
-
           {error && (
             <div className="mb-6 p-4 rounded-lg bg-destructive/10 text-destructive">
               {error}

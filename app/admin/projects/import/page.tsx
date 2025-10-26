@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { COMMON_INLINE_STYLES, THEME_GRADIENTS } from '@/lib/constants/styles';
 import { Upload, FileJson, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { PageHeader } from '@/components/admin';
 
 interface ImportResult {
   success: boolean;
@@ -127,13 +126,6 @@ export default function ImportProjectsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Import Projects from JSON"
-        description="Upload a JSON file or paste JSON data to bulk import projects"
-        backHref="/admin/projects"
-        backLabel="Back to Projects"
-      />
-
           <div className="max-w-5xl">
             {/* Import Mode Selection */}
             <div className="rounded-xl p-6 mb-6" style={{ background: THEME_GRADIENTS.card, border: '1px solid var(--card-border)' }}>

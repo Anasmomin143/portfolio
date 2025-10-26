@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import {
-  PageHeader,
   FormLayout,
   FormGrid,
   FormInput,
@@ -122,14 +121,7 @@ export default function EditProjectPage() {
   }
 
   return (
-    <div>
-          <PageHeader
-            title="Edit Project"
-            backHref="/admin/projects"
-            backLabel="Back to Projects"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             isLoading={saving}
             submitLabel="Save Changes"
@@ -237,6 +229,5 @@ export default function EditProjectPage() {
               variant="list"
             />
           </FormLayout>
-    </div>
   );
 }

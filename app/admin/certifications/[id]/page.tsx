@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { PageHeader, FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
+import { FormLayout, FormGrid, FormInput, FormTextarea, FormDate, FormNumber, FormUrl } from '@/components/admin';
 
 export default function EditCertificationPage() {
   const router = useRouter();
@@ -95,14 +95,7 @@ export default function EditCertificationPage() {
   }
 
   return (
-    <div>
-          <PageHeader
-            title="Edit Certification"
-            backHref="/admin/certifications"
-            backLabel="Back to Certifications"
-          />
-
-          <FormLayout
+    <FormLayout
             onSubmit={handleSubmit}
             error={error}
             isLoading={saving}
@@ -174,6 +167,5 @@ export default function EditCertificationPage() {
               hint="Optional"
             />
           </FormLayout>
-    </div>
   );
 }
