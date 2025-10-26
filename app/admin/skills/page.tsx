@@ -13,7 +13,7 @@ interface Skill {
   id: string;
   category: string;
   skill_name: string;
-  proficiency_level: number;
+  proficiency_level: string;
   years_experience: number | null;
   display_order: number;
 }
