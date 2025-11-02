@@ -5,9 +5,35 @@ import resumeData from '@/data/resume.json';
 import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 import { DownloadButton } from '@/components/resume/download-button';
 import { use } from 'react';
+import { usePersonalDetails } from '@/hooks/usePortfolio';
+import { useExperience, useProjects, useSkills, useCertifications } from '@/hooks/useResumeData';
 
 export default function ResumePage({ params }: { params: Promise<LocaleParams> }) {
   const { lang } = use(params);
+
+  // Fetch dynamic data
+  const { data: personalDetails, loading: loadingPersonal } = usePersonalDetails();
+  const { data: experienceData, loading: loadingExperience } = useExperience();
+  const { data: projectsData, loading: loadingProjects } = useProjects();
+  const { data: skillsData, loading: loadingSkills } = useSkills();
+  const { data: certificationsData, loading: loadingCertifications } = useCertifications();
+
+  // Use dynamic data if available, fallback to static data
+  const displayName = personalDetails?.full_name || resumeData.personal.name;
+  const displayTitle = personalDetails?.title || resumeData.personal.title;
+  const displayEmail = personalDetails?.email || resumeData.personal.email;
+  const displayPhone = personalDetails?.phone || resumeData.personal.phone;
+  const displayLocation = personalDetails?.location || resumeData.personal.location;
+  const displayLinkedin = personalDetails?.linkedin_url || resumeData.personal.linkedin;
+  const displayGithub = personalDetails?.github_url || resumeData.personal.github;
+  const displaySummary = personalDetails?.summary || personalDetails?.bio || resumeData.summary;
+
+  const experience = experienceData || resumeData.experience;
+  const projects = projectsData || resumeData.projects;
+  const skills = skillsData || resumeData.technicalSkills;
+  const certifications = certificationsData || resumeData.certifications;
+
+  const isLoading = loadingPersonal || loadingExperience || loadingProjects || loadingSkills || loadingCertifications;
 
   const formatDate = (dateString: string | null, current: boolean) => {
     if (current) return 'Present';
@@ -15,6 +41,14 @@ export default function ResumePage({ params }: { params: Promise<LocaleParams> }
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -52,30 +86,30 @@ export default function ResumePage({ params }: { params: Promise<LocaleParams> }
         <div className="resume-container mx-auto max-w-4xl bg-white shadow-2xl rounded-lg overflow-hidden" style={{ color: '#1a1a1a' }}>
           {/* Header Section */}
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-10">
-            <h1 className="text-4xl font-bold mb-2">{resumeData.personal.name}</h1>
-            <p className="text-xl mb-4 opacity-90">{resumeData.personal.title}</p>
+            <h1 className="text-4xl font-bold mb-2">{displayName}</h1>
+            <p className="text-xl mb-4 opacity-90">{displayTitle}</p>
 
             <div className="flex flex-wrap gap-4 text-sm">
-              <a href={`mailto:${resumeData.personal.email}`} className="flex items-center gap-2 hover:underline">
+              <a href={`mailto:${displayEmail}`} className="flex items-center gap-2 hover:underline">
                 <Mail className="w-4 h-4" />
-                {resumeData.personal.email}
+                {displayEmail}
               </a>
-              <a href={`tel:${resumeData.personal.phone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:underline">
+              <a href={`tel:${displayPhone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:underline">
                 <Phone className="w-4 h-4" />
-                {resumeData.personal.phone}
+                {displayPhone}
               </a>
               <span className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                {resumeData.personal.location}
+                {displayLocation}
               </span>
             </div>
 
             <div className="flex gap-4 mt-4">
-              <a href={resumeData.personal.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:underline">
+              <a href={displayLinkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:underline">
                 <Linkedin className="w-4 h-4" />
                 LinkedIn
               </a>
-              <a href={resumeData.personal.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:underline">
+              <a href={displayGithub} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:underline">
                 <Github className="w-4 h-4" />
                 GitHub
               </a>
@@ -87,14 +121,14 @@ export default function ResumePage({ params }: { params: Promise<LocaleParams> }
             {/* Summary */}
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4 pb-2 border-b-2 border-purple-600">Professional Summary</h2>
-              <p className="text-gray-700 leading-relaxed">{resumeData.summary}</p>
+              <p className="text-gray-700 leading-relaxed">{displaySummary}</p>
             </section>
 
             {/* Experience */}
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4 pb-2 border-b-2 border-purple-600">Professional Experience</h2>
               <div className="space-y-6">
-                {resumeData.experience.map((exp) => (
+                {experience.map((exp) => (
                   <div key={exp.id}>
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -132,7 +166,7 @@ export default function ResumePage({ params }: { params: Promise<LocaleParams> }
             <section className="mb-8 page-break">
               <h2 className="text-2xl font-bold mb-4 pb-2 border-b-2 border-purple-600">Key Projects</h2>
               <div className="space-y-6">
-                {resumeData.projects.map((project) => (
+                {projects.map((project) => (
                   <div key={project.id}>
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -172,27 +206,27 @@ export default function ResumePage({ params }: { params: Promise<LocaleParams> }
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-bold text-gray-900 mb-2">Frontend Frameworks</h3>
-                  <p className="text-gray-700 text-sm">{resumeData.technicalSkills.frontendFrameworks.join(', ')}</p>
+                  <p className="text-gray-700 text-sm">{skills.frontendFrameworks?.join(', ')}</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-2">Languages</h3>
-                  <p className="text-gray-700 text-sm">{resumeData.technicalSkills.languages.join(', ')}</p>
+                  <p className="text-gray-700 text-sm">{skills.languages?.join(', ')}</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-2">Styling & UI</h3>
-                  <p className="text-gray-700 text-sm">{resumeData.technicalSkills.styling.join(', ')}</p>
+                  <p className="text-gray-700 text-sm">{skills.styling?.join(', ')}</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-2">State Management</h3>
-                  <p className="text-gray-700 text-sm">{resumeData.technicalSkills.stateManagement.join(', ')}</p>
+                  <p className="text-gray-700 text-sm">{skills.stateManagement?.join(', ')}</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-2">Tools & DevOps</h3>
-                  <p className="text-gray-700 text-sm">{resumeData.technicalSkills.tools.join(', ')}</p>
+                  <p className="text-gray-700 text-sm">{skills.tools?.join(', ')}</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-2">Methodologies</h3>
-                  <p className="text-gray-700 text-sm">{resumeData.technicalSkills.methodologies.join(', ')}</p>
+                  <p className="text-gray-700 text-sm">{skills.methodologies?.join(', ')}</p>
                 </div>
               </div>
             </section>
@@ -201,7 +235,7 @@ export default function ResumePage({ params }: { params: Promise<LocaleParams> }
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4 pb-2 border-b-2 border-purple-600">Certifications</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {resumeData.certifications.map((cert) => (
+                {certifications.map((cert) => (
                   <div key={cert.id} className="flex items-start gap-2">
                     <span className="text-purple-600 mt-1">•</span>
                     <div>
