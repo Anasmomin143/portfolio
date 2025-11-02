@@ -6,7 +6,7 @@ type RouteContext = {
   params: Promise<{ id: string }>;
 };
 
-// GET /api/admin/skills/[id]
+// GET /api/admin/skills/[id] - Get single skill for current tenant
 export async function GET(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -15,6 +15,12 @@ export async function GET(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const supabase = getServiceSupabase();
 
@@ -22,6 +28,7 @@ export async function GET(request: Request, context: RouteContext) {
       .from('skills')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
 
     if (error) {
@@ -39,7 +46,7 @@ export async function GET(request: Request, context: RouteContext) {
   }
 }
 
-// PUT /api/admin/skills/[id]
+// PUT /api/admin/skills/[id] - Update skill for current tenant
 export async function PUT(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -48,20 +55,33 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const body = await request.json();
     const supabase = getServiceSupabase();
 
+    // Get old data for audit log and verify ownership
     const { data: oldData } = await supabase
       .from('skills')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
+
+    if (!oldData) {
+      return NextResponse.json({ error: 'Skill not found' }, { status: 404 });
+    }
 
     const { data, error } = await supabase
       .from('skills')
       .update(body)
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .select()
       .single();
 
@@ -70,8 +90,11 @@ export async function PUT(request: Request, context: RouteContext) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    await supabase.from('audit_log').insert({
+    // Log to audit trail with tenant context
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('audit_log') as any).insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'skills',
       record_id: id,
       action: 'UPDATE',
@@ -86,7 +109,7 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 }
 
-// DELETE /api/admin/skills/[id]
+// DELETE /api/admin/skills/[id] - Delete skill for current tenant
 export async function DELETE(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -95,27 +118,43 @@ export async function DELETE(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const supabase = getServiceSupabase();
 
+    // Get data for audit log and verify ownership
     const { data: oldData } = await supabase
       .from('skills')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
+
+    if (!oldData) {
+      return NextResponse.json({ error: 'Skill not found' }, { status: 404 });
+    }
 
     const { error } = await supabase
       .from('skills')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('tenant_id', tenantId);
 
     if (error) {
       console.error('Error deleting skill:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    await supabase.from('audit_log').insert({
+    // Log to audit trail with tenant context
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('audit_log') as any).insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'skills',
       record_id: id,
       action: 'DELETE',

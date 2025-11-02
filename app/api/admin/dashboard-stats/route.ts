@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth/auth';
 import { getServiceSupabase } from '@/lib/supabase/client';
 import { NextResponse } from 'next/server';
 
-// GET /api/admin/dashboard-stats - Get dashboard statistics
+// GET /api/admin/dashboard-stats - Get dashboard statistics for current tenant
 export async function GET() {
   const session = await auth();
 
@@ -11,14 +11,20 @@ export async function GET() {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const supabase = getServiceSupabase();
 
-    // Fetch counts for each entity
+    // Fetch counts for each entity (filtered by tenant)
     const [projectsResult, experienceResult, skillsResult, certificationsResult, activityResult] = await Promise.all([
-      supabase.from('projects').select('*', { count: 'exact', head: true }),
-      supabase.from('experience').select('*', { count: 'exact', head: true }),
-      supabase.from('skills').select('*', { count: 'exact', head: true }),
-      supabase.from('certifications').select('*', { count: 'exact', head: true }),
+      supabase.from('projects').select('*', { count: 'exact', head: true }).eq('tenant_id', tenantId),
+      supabase.from('experience').select('*', { count: 'exact', head: true }).eq('tenant_id', tenantId),
+      supabase.from('skills').select('*', { count: 'exact', head: true }).eq('tenant_id', tenantId),
+      supabase.from('certifications').select('*', { count: 'exact', head: true }).eq('tenant_id', tenantId),
       supabase
         .from('audit_log')
         .select(`
@@ -30,6 +36,7 @@ export async function GET() {
             email
           )
         `)
+        .eq('tenant_id', tenantId)
         .order('created_at', { ascending: false })
         .limit(10),
     ]);

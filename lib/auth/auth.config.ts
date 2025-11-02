@@ -2,6 +2,7 @@ import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
 import { getServiceSupabase } from '@/lib/supabase/client';
+import { getSubdomainInfo } from '@/lib/utils/subdomain';
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -14,8 +15,9 @@ export const authConfig: NextAuthConfig = {
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
+        subdomain: { label: 'Subdomain', type: 'hidden' }, // Added for tenant context
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Missing credentials');
         }
@@ -26,15 +28,41 @@ export const authConfig: NextAuthConfig = {
         try {
           const supabase = getServiceSupabase();
 
-          // Find admin user by email
+          // Get subdomain from request if available
+          let requestSubdomain: string | null = null;
+          if (request?.headers) {
+            const hostname = request.headers.get('host') || '';
+            const subdomainInfo = getSubdomainInfo(hostname);
+            requestSubdomain = subdomainInfo.subdomain;
+          }
+
+          // Find admin user by email with tenant information
           const { data: user, error } = await supabase
             .from('admin_users')
-            .select('*')
+            .select(`
+              *,
+              tenant:tenants!admin_users_tenant_id_fkey (
+                id,
+                subdomain,
+                name,
+                status
+              )
+            `)
             .eq('email', email)
             .single();
 
-          if (error || !user) {
+          if (error || !user || !user.tenant) {
             throw new Error('Invalid credentials');
+          }
+
+          // Verify tenant is active
+          if (user.tenant.status !== 'active') {
+            throw new Error('Account is suspended');
+          }
+
+          // Multi-tenant validation: user must belong to the subdomain they're logging into
+          if (requestSubdomain && user.tenant.subdomain !== requestSubdomain) {
+            throw new Error('Invalid credentials for this domain');
           }
 
           // Verify password
@@ -44,14 +72,21 @@ export const authConfig: NextAuthConfig = {
             throw new Error('Invalid credentials');
           }
 
-          // Return user object (don't include password_hash)
+          // Return user object with tenant information
           return {
             id: user.id,
             email: user.email,
             name: user.name,
+            tenantId: user.tenant.id,
+            tenantSubdomain: user.tenant.subdomain,
+            tenantName: user.tenant.name,
+            role: user.role,
           };
         } catch (error) {
           console.error('Auth error:', error);
+          if (error instanceof Error) {
+            throw error;
+          }
           throw new Error('Authentication failed');
         }
       },
@@ -59,18 +94,28 @@ export const authConfig: NextAuthConfig = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      // On sign in, add tenant info to JWT
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+        token.tenantId = (user as any).tenantId;
+        token.tenantSubdomain = (user as any).tenantSubdomain;
+        token.tenantName = (user as any).tenantName;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
+      // Add tenant info to session
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
+        (session.user as any).tenantId = token.tenantId as string;
+        (session.user as any).tenantSubdomain = token.tenantSubdomain as string;
+        (session.user as any).tenantName = token.tenantName as string;
+        (session.user as any).role = token.role as string;
       }
       return session;
     },
@@ -79,11 +124,17 @@ export const authConfig: NextAuthConfig = {
       const isOnAdminPanel = nextUrl.pathname.startsWith('/admin');
       const isOnLoginPage = nextUrl.pathname === '/admin/login';
 
+      // Admin panel requires authentication
       if (isOnAdminPanel && !isOnLoginPage) {
         if (!isLoggedIn) return false;
+
+        // TODO: Additional check - validate user's tenant matches current subdomain
+        // This prevents cross-tenant access via session manipulation
+
         return true;
       }
 
+      // Redirect logged-in users away from login page
       if (isLoggedIn && isOnLoginPage) {
         return Response.redirect(new URL('/admin', nextUrl));
       }

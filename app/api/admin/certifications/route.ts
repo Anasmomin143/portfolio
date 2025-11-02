@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth/auth';
 import { getServiceSupabase } from '@/lib/supabase/client';
 import { NextResponse } from 'next/server';
 
-// GET /api/admin/certifications - List all certifications
+// GET /api/admin/certifications - List all certifications for current tenant
 export async function GET() {
   const session = await auth();
 
@@ -11,11 +11,18 @@ export async function GET() {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const supabase = getServiceSupabase();
 
     const { data, error } = await supabase
       .from('certifications')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('display_order', { ascending: true });
 
     if (error) {
@@ -30,7 +37,7 @@ export async function GET() {
   }
 }
 
-// POST /api/admin/certifications - Create new certification
+// POST /api/admin/certifications - Create new certification for current tenant
 export async function POST(request: Request) {
   const session = await auth();
 
@@ -39,6 +46,12 @@ export async function POST(request: Request) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const body = await request.json();
     const supabase = getServiceSupabase();
 
@@ -50,10 +63,14 @@ export async function POST(request: Request) {
       }
     }
 
+    // Insert with tenant_id for data isolation
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error } = await (supabase as any)
       .from('certifications')
-      .insert(body)
+      .insert({
+        ...body,
+        tenant_id: tenantId,
+      })
       .select()
       .single();
 
@@ -62,10 +79,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Log to audit trail
+    // Log to audit trail with tenant context
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase as any).from('audit_log').insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'certifications',
       record_id: data.id,
       action: 'CREATE',

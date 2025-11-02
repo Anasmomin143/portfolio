@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "eslint",
     "clean": "rm -rf .next node_modules/.cache",
-    "seed:admin": "tsx scripts/seed-admin.ts"
+    "seed:admin": "tsx scripts/seed-admin.ts",
+    "check:database": "node scripts/check-database.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",

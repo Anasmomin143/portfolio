@@ -1,6 +1,8 @@
 import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n/request';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import { getSubdomainInfo } from './lib/utils/subdomain';
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -10,16 +12,76 @@ const intlMiddleware = createMiddleware({
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get('host') || '';
 
-  // Skip admin routes - let NextAuth handle them via API routes
-  if (pathname.startsWith('/admin') || pathname.startsWith('/api/auth')) {
-    return;
+  // Extract subdomain information
+  const subdomainInfo = getSubdomainInfo(hostname);
+
+  // Get or create response
+  let response: NextResponse;
+
+  // Skip ALL API routes from i18n (must be before domain-specific logic)
+  if (pathname.startsWith('/api')) {
+    response = NextResponse.next();
+
+    // Still add tenant context headers for subdomain API calls
+    if (subdomainInfo.subdomain) {
+      response.headers.set('x-tenant-subdomain', subdomainInfo.subdomain);
+    }
+  }
+  // Handle main domain (landing page, registration, etc.)
+  else if (subdomainInfo.isMainDomain) {
+    // Main domain routes - ONLY landing page and registration allowed
+    // Landing page: /
+    // Registration: /register
+
+    // Skip admin routes on main domain - redirect to landing page
+    if (pathname.startsWith('/admin')) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    // Only allow landing page and registration on main domain
+    // All other routes (portfolio pages) should redirect to landing page
+    if (pathname === '/' || pathname === '/register' || pathname === '/login') {
+      response = NextResponse.next();
+    }
+    // Redirect any i18n routes (like /en/contact, /en/about) to landing page
+    else {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
+  // Handle tenant subdomain
+  else if (subdomainInfo.subdomain) {
+    // Subdomain routes
+    // Portfolio: subdomain.domain.com/ (public portfolio)
+    // Admin: subdomain.domain.com/admin (tenant admin panel)
+
+    // Admin routes - let them through (NextAuth will handle auth)
+    if (pathname.startsWith('/admin')) {
+      response = NextResponse.next();
+      response.headers.set('x-tenant-subdomain', subdomainInfo.subdomain);
+    }
+    // Public portfolio pages - handle internationalization
+    else {
+      response = intlMiddleware(request) || NextResponse.next();
+      response.headers.set('x-tenant-subdomain', subdomainInfo.subdomain);
+    }
+  }
+  // Unknown domain pattern
+  else {
+    response = NextResponse.next();
   }
 
-  // Handle internationalized routes
-  return intlMiddleware(request);
+  // Add hostname info to headers for debugging
+  response.headers.set('x-hostname', hostname);
+  response.headers.set('x-is-main-domain', String(subdomainInfo.isMainDomain));
+
+  return response;
 }
 
 export const config = {
-  matcher: ['/', '/(en|fr)/:path*']
+  // Match all routes except static files and Next.js internals
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\..*|api/webhook).*)',
+  ]
 };

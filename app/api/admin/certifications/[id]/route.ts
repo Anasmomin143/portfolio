@@ -7,7 +7,7 @@ type RouteContext = {
   params: Promise<{ id: string }>;
 };
 
-// GET /api/admin/certifications/[id]
+// GET /api/admin/certifications/[id] - Get single certification for current tenant
 export async function GET(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -16,6 +16,12 @@ export async function GET(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const supabase = getServiceSupabase();
 
@@ -23,6 +29,7 @@ export async function GET(request: Request, context: RouteContext) {
       .from('certifications')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
 
     if (error) {
@@ -40,7 +47,7 @@ export async function GET(request: Request, context: RouteContext) {
   }
 }
 
-// PUT /api/admin/certifications/[id]
+// PUT /api/admin/certifications/[id] - Update certification for current tenant
 export async function PUT(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -49,21 +56,34 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const body = await request.json() as Database['public']['Tables']['certifications']['Update'];
     const supabase = getServiceSupabase();
 
+    // Get old data for audit log and verify ownership
     const { data: oldData } = await supabase
       .from('certifications')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
+
+    if (!oldData) {
+      return NextResponse.json({ error: 'Certification not found' }, { status: 404 });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error } = await (supabase as any)
       .from('certifications')
       .update(body)
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .select()
       .single();
 
@@ -72,9 +92,11 @@ export async function PUT(request: Request, context: RouteContext) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Log to audit trail with tenant context
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase as any).from('audit_log').insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'certifications',
       record_id: id,
       action: 'UPDATE',
@@ -89,7 +111,7 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 }
 
-// DELETE /api/admin/certifications/[id]
+// DELETE /api/admin/certifications/[id] - Delete certification for current tenant
 export async function DELETE(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -98,28 +120,43 @@ export async function DELETE(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const supabase = getServiceSupabase();
 
+    // Get data for audit log and verify ownership
     const { data: oldData } = await supabase
       .from('certifications')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
+
+    if (!oldData) {
+      return NextResponse.json({ error: 'Certification not found' }, { status: 404 });
+    }
 
     const { error } = await supabase
       .from('certifications')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('tenant_id', tenantId);
 
     if (error) {
       console.error('Error deleting certification:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Log to audit trail with tenant context
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase as any).from('audit_log').insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'certifications',
       record_id: id,
       action: 'DELETE',

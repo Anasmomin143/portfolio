@@ -6,10 +6,11 @@ import { AdminSidebar } from './admin-sidebar';
 import { PageHeader } from './page-header';
 import { getPageHeaderConfig } from './page-header-config';
 import { ReactNode, useEffect } from 'react';
+import type { Session } from 'next-auth';
 
 interface AdminLayoutWrapperProps {
   children: ReactNode;
-  session: any;
+  session: Session | null;
 }
 
 export function AdminLayoutWrapper({ children, session: serverSession }: AdminLayoutWrapperProps) {

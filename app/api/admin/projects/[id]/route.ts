@@ -6,8 +6,8 @@ type RouteContext = {
   params: Promise<{ id: string }>;
 };
 
-// GET /api/admin/projects/[id] - Get single project
-export async function GET(request: Request, context: RouteContext) {
+// GET /api/admin/projects/[id] - Get single project (tenant-scoped)
+export async function GET(_request: Request, context: RouteContext) {
   const session = await auth();
 
   if (!session?.user) {
@@ -15,6 +15,12 @@ export async function GET(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = session.user.tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const supabase = getServiceSupabase();
 
@@ -22,6 +28,7 @@ export async function GET(request: Request, context: RouteContext) {
       .from('projects')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId) // Ensure tenant isolation
       .single();
 
     if (error) {
@@ -39,7 +46,7 @@ export async function GET(request: Request, context: RouteContext) {
   }
 }
 
-// PUT /api/admin/projects/[id] - Update project
+// PUT /api/admin/projects/[id] - Update project (tenant-scoped)
 export async function PUT(request: Request, context: RouteContext) {
   const session = await auth();
 
@@ -48,21 +55,33 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = session.user.tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const body = await request.json();
     const supabase = getServiceSupabase();
 
-    // Get old data for audit log
+    // Get old data for audit log (with tenant check)
     const { data: oldData } = await supabase
       .from('projects')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
+
+    if (!oldData) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
 
     const { data, error } = await supabase
       .from('projects')
       .update(body)
       .eq('id', id)
+      .eq('tenant_id', tenantId) // Ensure tenant isolation
       .select()
       .single();
 
@@ -71,9 +90,11 @@ export async function PUT(request: Request, context: RouteContext) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Log to audit trail
-    await supabase.from('audit_log').insert({
+    // Log to audit trail with tenant context
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('audit_log') as any).insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'projects',
       record_id: id,
       action: 'UPDATE',
@@ -88,8 +109,8 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 }
 
-// DELETE /api/admin/projects/[id] - Delete project
-export async function DELETE(request: Request, context: RouteContext) {
+// DELETE /api/admin/projects/[id] - Delete project (tenant-scoped)
+export async function DELETE(_request: Request, context: RouteContext) {
   const session = await auth();
 
   if (!session?.user) {
@@ -97,29 +118,43 @@ export async function DELETE(request: Request, context: RouteContext) {
   }
 
   try {
+    const tenantId = session.user.tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const { id } = await context.params;
     const supabase = getServiceSupabase();
 
-    // Get data for audit log
+    // Get data for audit log (with tenant check)
     const { data: oldData } = await supabase
       .from('projects')
       .select('*')
       .eq('id', id)
+      .eq('tenant_id', tenantId)
       .single();
+
+    if (!oldData) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
 
     const { error } = await supabase
       .from('projects')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .eq('tenant_id', tenantId); // Ensure tenant isolation
 
     if (error) {
       console.error('Error deleting project:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Log to audit trail
-    await supabase.from('audit_log').insert({
+    // Log to audit trail with tenant context
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('audit_log') as any).insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'projects',
       record_id: id,
       action: 'DELETE',

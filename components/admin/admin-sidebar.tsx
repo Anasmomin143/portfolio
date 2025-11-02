@@ -26,6 +26,7 @@ interface AdminSidebarProps {
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Personal Details', href: '/admin/personal-details', icon: User },
   { name: 'Projects', href: '/admin/projects', icon: FolderGit2 },
   { name: 'Experience', href: '/admin/experience', icon: Briefcase },
   { name: 'Skills', href: '/admin/skills', icon: Layers },

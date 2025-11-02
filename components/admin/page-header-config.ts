@@ -29,6 +29,14 @@ export function getPageHeaderConfig(pathname: string, userName?: string): PageHe
     };
   }
 
+  // Personal Details
+  if (pathname === '/admin/personal-details') {
+    return {
+      title: 'Personal Details',
+      description: 'Manage your personal information and contact details',
+    };
+  }
+
   // Projects
   if (pathname === '/admin/projects') {
     return {

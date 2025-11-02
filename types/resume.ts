@@ -1,11 +1,23 @@
 export interface PersonalInfo {
-  name: string;
+  id?: string;
+  tenant_id?: string;
+  full_name: string;
   title: string;
   email: string;
   phone: string;
-  linkedin: string;
-  github: string;
   location: string;
+  bio?: string;
+  summary?: string;
+  linkedin_url?: string;
+  github_url?: string;
+  twitter_url?: string;
+  portfolio_url?: string;
+  website_url?: string;
+  profile_photo_url?: string;
+  resume_url?: string;
+  custom_fields?: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CoreCompetencies {

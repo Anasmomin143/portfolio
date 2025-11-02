@@ -10,7 +10,7 @@ interface ImportResult {
   duplicates: string[];
 }
 
-// POST /api/admin/experience/import - Bulk import experience from JSON
+// POST /api/admin/experience/import - Bulk import experience from JSON for current tenant
 export async function POST(request: Request) {
   const session = await auth();
 
@@ -19,6 +19,12 @@ export async function POST(request: Request) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const body = await request.json();
     const supabase = getServiceSupabase();
 
@@ -41,11 +47,12 @@ export async function POST(request: Request) {
     // Required fields for validation
     const requiredFields = ['id', 'company', 'position', 'start_date', 'description'];
 
-    // Check for existing experience IDs to avoid duplicates
+    // Check for existing experience IDs to avoid duplicates (within tenant)
     const experienceIds = body.experience.map((e: { id?: string }) => e.id).filter(Boolean);
     const { data: existingExperience } = await supabase
       .from('experience')
       .select('id')
+      .eq('tenant_id', tenantId)
       .in('id', experienceIds);
 
     const existingIds = new Set(existingExperience?.map((e) => e.id) || []);
@@ -99,7 +106,7 @@ export async function POST(request: Request) {
           }
         }
 
-        // Insert the experience
+        // Insert the experience with tenant_id
         const { data, error } = await supabase
           .from('experience')
           .insert({
@@ -114,6 +121,7 @@ export async function POST(request: Request) {
             technologies: experience.technologies || [],
             location: experience.location || null,
             display_order: experience.display_order || 0,
+            tenant_id: tenantId,
           })
           .select()
           .single();
@@ -128,9 +136,11 @@ export async function POST(request: Request) {
           continue;
         }
 
-        // Log to audit trail
-        await supabase.from('audit_log').insert({
+        // Log to audit trail with tenant context
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase.from('audit_log') as any).insert({
           admin_user_id: session.user.id,
+          tenant_id: tenantId,
           table_name: 'experience',
           record_id: data.id,
           action: 'CREATE',

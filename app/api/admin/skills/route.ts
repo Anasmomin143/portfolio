@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth/auth';
 import { getServiceSupabase } from '@/lib/supabase/client';
 import { NextResponse } from 'next/server';
 
-// GET /api/admin/skills - List all skills
+// GET /api/admin/skills - List all skills for current tenant
 export async function GET() {
   const session = await auth();
 
@@ -11,11 +11,18 @@ export async function GET() {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const supabase = getServiceSupabase();
 
     const { data, error } = await supabase
       .from('skills')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('category', { ascending: true })
       .order('display_order', { ascending: true });
 
@@ -31,7 +38,7 @@ export async function GET() {
   }
 }
 
-// POST /api/admin/skills - Create new skill
+// POST /api/admin/skills - Create new skill for current tenant
 export async function POST(request: Request) {
   const session = await auth();
 
@@ -40,6 +47,12 @@ export async function POST(request: Request) {
   }
 
   try {
+    const tenantId = (session.user as any).tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: 'Tenant context required' }, { status: 400 });
+    }
+
     const body = await request.json();
     const supabase = getServiceSupabase();
 
@@ -51,9 +64,13 @@ export async function POST(request: Request) {
       }
     }
 
+    // Insert with tenant_id for data isolation
     const { data, error } = await supabase
       .from('skills')
-      .insert(body)
+      .insert({
+        ...body,
+        tenant_id: tenantId,
+      })
       .select()
       .single();
 
@@ -62,9 +79,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Log to audit trail
-    await supabase.from('audit_log').insert({
+    // Log to audit trail with tenant context
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('audit_log') as any).insert({
       admin_user_id: session.user.id,
+      tenant_id: tenantId,
       table_name: 'skills',
       record_id: data.id,
       action: 'CREATE',
