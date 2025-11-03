@@ -3,6 +3,7 @@ import { locales, defaultLocale } from './i18n/request';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { getSubdomainInfo } from './lib/utils/subdomain';
+import { verifyTenantSubdomain } from './lib/utils/verify-tenant';
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -52,6 +53,18 @@ export default async function middleware(request: NextRequest) {
   }
   // Handle tenant subdomain
   else if (subdomainInfo.subdomain) {
+    // Verify subdomain exists in database
+    const tenantVerification = await verifyTenantSubdomain(subdomainInfo.subdomain);
+
+    // If subdomain doesn't exist or is inactive, show error page
+    if (!tenantVerification.exists) {
+      // Create error response with helpful message
+      const errorUrl = new URL('/', request.url);
+      errorUrl.searchParams.set('error', 'invalid_subdomain');
+      errorUrl.searchParams.set('subdomain', subdomainInfo.subdomain);
+      return NextResponse.redirect(errorUrl);
+    }
+
     // Subdomain routes
     // Portfolio: subdomain.domain.com/ (public portfolio)
     // Admin: subdomain.domain.com/admin (tenant admin panel)
@@ -60,11 +73,17 @@ export default async function middleware(request: NextRequest) {
     if (pathname.startsWith('/admin')) {
       response = NextResponse.next();
       response.headers.set('x-tenant-subdomain', subdomainInfo.subdomain);
+      if (tenantVerification.tenantId) {
+        response.headers.set('x-tenant-id', tenantVerification.tenantId);
+      }
     }
     // Public portfolio pages - handle internationalization
     else {
       response = intlMiddleware(request) || NextResponse.next();
       response.headers.set('x-tenant-subdomain', subdomainInfo.subdomain);
+      if (tenantVerification.tenantId) {
+        response.headers.set('x-tenant-id', tenantVerification.tenantId);
+      }
     }
   }
   // Unknown domain pattern

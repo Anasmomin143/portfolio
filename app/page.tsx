@@ -1,13 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { ArrowRight, LogIn, UserPlus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { ArrowRight, LogIn, UserPlus, AlertCircle } from 'lucide-react';
 
 export default function LandingPage() {
+  const searchParams = useSearchParams();
   const [subdomain, setSubdomain] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [invalidSubdomainError, setInvalidSubdomainError] = useState<string | null>(null);
+
+  // Check for invalid subdomain error from middleware redirect
+  useEffect(() => {
+    const errorType = searchParams.get('error');
+    const subdomainParam = searchParams.get('subdomain');
+
+    if (errorType === 'invalid_subdomain' && subdomainParam) {
+      setInvalidSubdomainError(subdomainParam);
+    }
+  }, [searchParams]);
 
   const handleExistingUserLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +58,30 @@ export default function LandingPage() {
     <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       <div className="max-w-4xl w-full text-center">
         <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+          {/* Invalid Subdomain Error Banner */}
+          {invalidSubdomainError && (
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-left">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-bold text-red-800 mb-1">Subdomain Not Found</h3>
+                  <p className="text-sm text-red-700">
+                    The subdomain <code className="bg-red-100 px-2 py-0.5 rounded font-mono">{invalidSubdomainError}</code> does not exist or is inactive.
+                  </p>
+                  <p className="text-sm text-red-600 mt-2">
+                    Please check your subdomain or create a new account below.
+                  </p>
+                  <button
+                    onClick={() => setInvalidSubdomainError(null)}
+                    className="mt-3 text-sm text-red-600 hover:text-red-800 underline"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
             Multi-Tenant Portfolio Platform
           </h1>

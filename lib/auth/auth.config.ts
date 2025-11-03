@@ -128,8 +128,23 @@ export const authConfig: NextAuthConfig = {
       if (isOnAdminPanel && !isOnLoginPage) {
         if (!isLoggedIn) return false;
 
-        // TODO: Additional check - validate user's tenant matches current subdomain
+        // Validate user's tenant matches current subdomain
         // This prevents cross-tenant access via session manipulation
+        const hostname = nextUrl.hostname;
+        const subdomainInfo = getSubdomainInfo(hostname);
+
+        // If accessing from a subdomain, verify user belongs to that tenant
+        if (subdomainInfo.subdomain && auth.user) {
+          const userTenantSubdomain = (auth.user as any).tenantSubdomain;
+
+          // User must belong to the subdomain they're accessing
+          if (userTenantSubdomain !== subdomainInfo.subdomain) {
+            console.warn(
+              `Cross-tenant access attempt blocked: User from ${userTenantSubdomain} trying to access ${subdomainInfo.subdomain}`
+            );
+            return false; // This will redirect to login
+          }
+        }
 
         return true;
       }
